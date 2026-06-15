@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="ETHOS·TX">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icono-192.png">
-<title>ETHOS·TX v19 — Decisión Transfusional + Timing Anticoagulación + Bridging + Safety Gate</title>
+<title>ETHOS·TX v20 — Decisión Transfusional + Timing Anticoagulación + Bridging + Safety Gate</title>
 <style>
 :root{
 --bg:#F8F7F4;--bgw:#F3F1EC;--sf:#FFF;--sfa:#FAF9F7;
@@ -217,7 +217,7 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false" oncopy="return false" oncut="return false" onpaste="return false">
 
 <header>
-<div class="logo"><div class="lm">TX</div><span class="lt">ETHOS<em>·TX</em></span><span class="lv" title="v19: estatus regulatorio andexanet (retiro EE.UU. 22-dic-2025; condicional EMA) + rebote tardío dabigatrán; sincronización de string de versión + corrección de atribución de cita (Kietaibl/ESAIC). v18: Módulo docente A1 Antiagregantes (aspirina, P2Y12, DAPT, stents coronarios) + corrección string versión en timestamp de sesión">v19</span></div>
+<div class="logo"><div class="lm">TX</div><span class="lt">ETHOS<em>·TX</em></span><span class="lv" title="v20: verificación y corrección de DOI del corpus docente (Clevenger→10.1002/ejhf.514, Warner→10.1016/j.mayocp.2021.07.017, ICCAMS sustituida por Althoff 2019→10.1097/SLA.0000000000003095). v19: estatus regulatorio andexanet (retiro EE.UU. 22-dic-2025; condicional EMA) + rebote tardío dabigatrán; sincronización de string de versión + corrección de atribución de cita (Kietaibl/ESAIC). v18: Módulo docente A1 Antiagregantes (aspirina, P2Y12, DAPT, stents coronarios) + corrección string versión en timestamp de sesión">v20</span></div>
 <div class="hb">
   <button class="bh" onclick="window.print()">⎙ Imprimir</button>
   <button class="bh" onclick="nuevoP()" style="background:#dc2626;color:white;border-color:#dc2626;margin-left:8px" title="Limpiar todos los campos y comenzar con un nuevo paciente">🔄 Nuevo paciente</button>
@@ -1447,7 +1447,7 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 
 </div>
 
-<div class="sfooter">ETHOS·TX v19 · Safety Gate + CHA₂DS₂-VA (ESC 2024) + Caprini (ACCP 2012) + Módulo Docente · Protocolo HHHA v10 · Lumina Health AI · Dr. E. Salvador Moreno · 2026 · <strong style="color:var(--orange)">PROTOTIPO EN VALIDACIÓN</strong></div>
+<div class="sfooter">ETHOS·TX v20 · Safety Gate + CHA₂DS₂-VA (ESC 2024) + Caprini (ACCP 2012) + Módulo Docente · Protocolo HHHA v10 · Lumina Health AI · Dr. E. Salvador Moreno · 2026 · <strong style="color:var(--orange)">PROTOTIPO EN VALIDACIÓN</strong></div>
 
 <script>
 // ═══ PROTECCIÓN ANTI-COPIA ═══
@@ -1588,7 +1588,7 @@ const RF={
   
   // PBM
   'CPOC-2025':{ s:'Centre for Perioperative Care (CPOC 2025)', f:'Guideline for the Management of Anaemia in the Perioperative Pathway', d:'', p:'', u:'https://cpoc.org.uk/guidelines-and-resources/guidelines/anaemia-perioperative-pathway'},
-  'ICCAMS-2023':{ s:'ICCAMS Group (2023)', f:'Patient blood management in elective surgery: a systematic review', d:'10.1016/S0140-6736(23)00004-4', p:'36746196'},
+  'Althoff-2019':{ s:'Althoff FC et al. (Ann Surg 2019)', f:'Multimodal Patient Blood Management Program Based on a Three-pillar Strategy: A Systematic Review and Meta-analysis', d:'10.1097/SLA.0000000000003095'},
   'Carson-RBC':{ s:'Carson JL et al. (AABB 2023)', f:'Red Blood Cell Transfusion: 2023 AABB International Guidelines', d:'10.1001/jama.2023.12914', p:'37824153'},
   
   // NUEVAS v9 — Plaquetas + Sangrado perioperatorio
@@ -1596,8 +1596,8 @@ const RF={
   'ESAIC-BLEEDING-2023':{ s:'Kietaibl S et al. (ESAIC 2023)', f:'Management of severe peri-operative bleeding: ESAIC Guidelines Second update 2022', d:'10.1097/EJA.0000000000001803', p:'36855941'},
   // PBM / Anemia perioperatoria
   'Fowler-2015':{ s:'Fowler AJ et al. (Br J Surg 2015)', f:'Meta-analysis of the association between preoperative anaemia and mortality after surgery', d:'10.1002/bjs.9861'},
-  'Clevenger-2016':{ s:'Clevenger B et al. (Eur J Heart Fail 2016)', f:'Systematic review and meta-analysis of iron therapy in anaemic adults without chronic kidney disease', d:'10.1002/ejhf.576'},
-  'Warner-2021':{ s:'Warner MA et al. (Mayo Clin Proc 2021)', f:'Implementation of a Comprehensive Patient Blood Management Program for Hospitalized Patients at a Large United States Medical Center', d:'10.1016/j.mayocp.2021.09.004'},
+  'Clevenger-2016':{ s:'Clevenger B et al. (Eur J Heart Fail 2016)', f:'Systematic review and meta-analysis of iron therapy in anaemic adults without chronic kidney disease', d:'10.1002/ejhf.514'},
+  'Warner-2021':{ s:'Warner MA et al. (Mayo Clin Proc 2021)', f:'Implementation of a Comprehensive Patient Blood Management Program for Hospitalized Patients at a Large United States Medical Center', d:'10.1016/j.mayocp.2021.07.017'},
   'Bisbe-2015':{ s:'Bisbe E, Basora M (Rev Esp Anestesiol 2015)', f:'Manejo práctico de la optimización preoperatoria y del tratamiento prequirúrgico de la anemia en diferentes escenarios clínicos', u:'https://pubmed.ncbi.nlm.nih.gov/?term=bisbe+basora+anemia+preoperatoria+2015+Rev+Esp+Anestesiol'},
   'Moral-2024':{ s:'Moral V et al. (Rev Esp Anestesiol 2024)', f:'Management of peri-surgical anemia in elective surgery — Delphi-UCLA methodology', u:'https://pubmed.ncbi.nlm.nih.gov/?term=moral+peri-surgical+anemia+elective+surgery+delphi+2024'},
   'Stoffel-2017':{ s:'Stoffel NU et al. (Lancet Haematol 2017)', f:'Iron absorption from oral iron supplements given on consecutive versus alternate days and as single morning doses versus twice-daily split dosing in iron-depleted women', d:'10.1016/S2352-3026(17)30182-5', p:'29032957'},
@@ -2952,7 +2952,7 @@ function evalAnemia(){
         defFuncional?'▸ Ferritina 30-100 + TSAT &lt;20%: déficit <strong>funcional</strong>. El hierro existe pero está secuestrado por inflamación (hepcidina elevada). Responde mejor a hierro EV que oral.':
         ferritina!==null&&tsat!==null?'▸ Sin déficit de hierro confirmado. Si persiste anemia: investigar B12, folato, ERC, hemólisis.':
         '▸ Solicitar ferritina + TSAT para completar evaluación PBM. Son los exámenes mínimos prequirúrgicos del protocolo HHHA.'}<br><br>
-      El déficit de hierro es la causa <strong>más prevalente y tratable</strong> de anemia preoperatoria. Corregirlo evita transfusiones en la mayoría de los casos (${rt('ICCAMS-2023')}).
+      El déficit de hierro es la causa <strong>más prevalente y tratable</strong> de anemia preoperatoria. Corregirlo evita transfusiones en la mayoría de los casos (${rt('Althoff-2019')}).
     </div>
   </div>
   <div class="doc-section">
@@ -3001,7 +3001,7 @@ function evalAnemia(){
   <div class="doc-section" style="border-color:var(--bdl);background:var(--bgw)">
     <div class="doc-title" style="color:var(--tc);font-size:12px">📚 Referencias · Clic para abrir</div>
     <div class="doc-body" style="font-size:12px;line-height:2.2">
-      ${rt('HHHA-v10')} · ${rt('SSASUR')} · ${rt('Fowler-2015')} · ${rt('Bisbe-2015')} · ${rt('Clevenger-2016')} · ${rt('Moral-2024')} · ${rt('Moretti-2015')} · ${rt('Stoffel-2017')} · ${rt('Warner-2021')} · ${rt('CPOC-2025')} · ${rt('ICCAMS-2023')} · ${rt('Carson-RBC')} · ${rt('MINT')} · ${rt('ESAIC-BLEEDING-2023')}
+      ${rt('HHHA-v10')} · ${rt('SSASUR')} · ${rt('Fowler-2015')} · ${rt('Bisbe-2015')} · ${rt('Clevenger-2016')} · ${rt('Moral-2024')} · ${rt('Moretti-2015')} · ${rt('Stoffel-2017')} · ${rt('Warner-2021')} · ${rt('CPOC-2025')} · ${rt('Althoff-2019')} · ${rt('Carson-RBC')} · ${rt('MINT')} · ${rt('ESAIC-BLEEDING-2023')}
     </div>
   </div>`;
 
@@ -4552,7 +4552,7 @@ function evalTiming() {
         <li>Para reversión urgente: ver módulo "Coagulopatía / Reversión"</li>
       </ul>
     </div>
-    <div class="eval-ts">Sesión ${id} · ${t} · ETHOS·TX v19</div>
+    <div class="eval-ts">Sesión ${id} · ${t} · ETHOS·TX v20</div>
   `;
   
   const out = document.getElementById('out-timing');
@@ -6302,12 +6302,12 @@ const TUTOR_KB=[
 {id:'ESAIC-DOAC',cita:'Grottke O et al. (ESAIC 2024)',titulo:'Clinical guideline on reversal of direct oral anticoagulants in patients with life-threatening bleeding',doi:'10.1097/EJA.0000000000001968',tema:'Reversión de anticoagulantes orales directos (DOAC) en sangrado vital. Inhibidores del factor Xa (apixabán, rivaroxabán): andexanet alfa o concentrado de complejo protrombínico (CCP) si no disponible. Dabigatrán (inhibidor de trombina): idarucizumab como reversor específico. Considerar tiempo desde última dosis y función renal.'},
 {id:'ISTH-2024',cita:'Levy JH et al. (ISTH 2024)',titulo:'Reversal of direct oral anticoagulants: guidance from the SSC of the ISTH',doi:'10.1016/j.jtha.2024.07.009',tema:'Guía ISTH sobre reversión de DOAC. Reversores específicos (idarucizumab para dabigatrán, andexanet para anti-Xa) y CCP como alternativa. Enfatiza evaluar el momento de la última dosis, niveles de fármaco si disponibles, y que no todo sangrado en paciente anticoagulado requiere reversión farmacológica.'},
 {id:'AABB-PLT-2025',cita:'Metcalf RA, Stanworth SJ et al. (AABB/ICTMG 2025)',titulo:'Platelet Transfusion: 2025 AABB and ICTMG International Clinical Practice Guidelines',doi:'10.1001/jama.2025.7529',tema:'Guía 2025 de transfusión de plaquetas. Umbrales profilácticos: 10×10⁹/L en paciente estable con hipoproliferación; 20×10⁹/L con factores de riesgo; 50×10⁹/L para procedimientos invasivos mayores o sangrado activo; 100×10⁹/L para neurocirugía o sangrado en SNC. No transfundir profilácticamente sin indicación clara.'},
-{id:'ICCAMS-2023',cita:'ICCAMS Group (2023)',titulo:'Patient blood management in elective surgery: a systematic review',doi:'10.1016/S0140-6736(23)00004-4',tema:'Revisión sistemática de Patient Blood Management (PBM) en cirugía electiva. La optimización de la masa eritrocitaria propia, minimización de pérdidas y tolerancia a la anemia reduce la exposición transfusional y mejora desenlaces. Pilar: tratar la anemia preoperatoria antes de la cirugía.'},
+{id:'Althoff-2019',cita:'Althoff FC et al. (Ann Surg 2019)',titulo:'Multimodal Patient Blood Management Program Based on a Three-pillar Strategy: A Systematic Review and Meta-analysis',doi:'10.1097/SLA.0000000000003095',tema:'Revisión sistemática y metaanálisis de programas multimodales de Patient Blood Management (PBM). La estrategia de tres pilares —optimizar la masa eritrocitaria propia, minimizar pérdidas y tolerar la anemia— reduce la exposición transfusional manteniendo o mejorando desenlaces. Pilar: tratar la anemia preoperatoria antes de la cirugía.'},
 {id:'Fowler-2015',cita:'Fowler AJ et al. (Br J Surg 2015)',titulo:'Meta-analysis of the association between preoperative anaemia and mortality after surgery',doi:'10.1002/bjs.9861',tema:'Metaanálisis: la anemia preoperatoria se asocia de forma independiente con mayor mortalidad y morbilidad postoperatoria. Justifica detectar y tratar la anemia antes de la cirugía electiva en lugar de transfundir intraoperatoriamente.'},
-{id:'Clevenger-2016',cita:'Clevenger B et al. (Eur J Heart Fail 2016)',titulo:'Systematic review and meta-analysis of iron therapy in anaemic adults without chronic kidney disease',doi:'10.1002/ejhf.576',tema:'La terapia con hierro (oral o IV) mejora la hemoglobina en adultos anémicos sin enfermedad renal crónica. Soporta el uso de hierro en el manejo de la anemia preoperatoria por déficit de hierro.'},
+{id:'Clevenger-2016',cita:'Clevenger B et al. (Eur J Heart Fail 2016)',titulo:'Systematic review and meta-analysis of iron therapy in anaemic adults without chronic kidney disease',doi:'10.1002/ejhf.514',tema:'La terapia con hierro (oral o IV) mejora la hemoglobina en adultos anémicos sin enfermedad renal crónica. Soporta el uso de hierro en el manejo de la anemia preoperatoria por déficit de hierro.'},
 {id:'Stoffel-2017',cita:'Stoffel NU et al. (Lancet Haematol 2017)',titulo:'Iron absorption from oral iron supplements given on consecutive versus alternate days',doi:'10.1016/S2352-3026(17)30182-5',tema:'La administración de hierro oral en días alternos (no diario) y en dosis única matinal mejora la absorción fraccional al inducir menos hepcidina. Cambia la pauta clásica de hierro oral diario dividido.'},
 {id:'Moretti-2015',cita:'Moretti D et al. (Blood 2015)',titulo:'Oral iron supplements increase hepcidin and decrease iron absorption from daily or twice-daily doses',doi:'10.1182/blood-2015-05-642223',tema:'Dosis altas o divididas de hierro oral elevan la hepcidina y reducen la absorción de las dosis siguientes. Fundamenta dar hierro oral en dosis única en días alternos en lugar de diario fraccionado.'},
-{id:'Warner-2021',cita:'Warner MA et al. (Mayo Clin Proc 2021)',titulo:'Implementation of a Comprehensive Patient Blood Management Program',doi:'10.1016/j.mayocp.2021.09.004',tema:'La implementación de un programa integral de PBM en un gran centro redujo la utilización de hemocomponentes manteniendo o mejorando desenlaces. Evidencia de impacto operativo y de seguridad del PBM a escala institucional.'},
+{id:'Warner-2021',cita:'Warner MA et al. (Mayo Clin Proc 2021)',titulo:'Implementation of a Comprehensive Patient Blood Management Program',doi:'10.1016/j.mayocp.2021.07.017',tema:'La implementación de un programa integral de PBM en un gran centro redujo la utilización de hemocomponentes manteniendo o mejorando desenlaces. Evidencia de impacto operativo y de seguridad del PBM a escala institucional.'},
 {id:'PlaNeT-2',cita:'Curley A et al. (PlaNeT-2 2019)',titulo:'Randomized Trial of Platelet-Transfusion Thresholds in Neonates',doi:'10.1056/NEJMoa1807320',tema:'En neonatos, un umbral de transfusión de plaquetas más alto (50×10⁹/L) se asoció con MÁS muerte o sangrado mayor que un umbral restrictivo (25×10⁹/L). Contraintuitivo: en neonatos, transfundir plaquetas de más es dañino. Umbral restrictivo preferido.'},
 {id:'NATA',cita:'New HV et al. (BCSH/NATA 2016)',titulo:'Guidelines on transfusion for fetuses, neonates and older children',doi:'10.1111/bjh.14233',tema:'Guía de transfusión en feto, neonato y niños. Umbrales específicos por edad y peso, distintos del adulto. Considerar volumen circulante reducido y dosificación en mL/kg.'},
 {id:'Ramirez-2026',cita:'Ramírez G, Basso L et al. (Rev Chil Anest 2026)',titulo:'Trastornos de coagulación en la paciente obstétrica',doi:'10.25237/revchilanestv55n3-04',tema:'Coagulopatía en la paciente obstétrica. El embarazo induce estado procoagulante: el fibrinógeno se eleva a 4-6 g/L al término, por lo que un fibrinógeno de 2,5 g/L es bajo en una embarazada. TP/TTPa normales no descartan coagulopatía en HPP activa. El fibrinógeno es el marcador más precoz y sensible.'},
