@@ -206,6 +206,8 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 .safety-block-warning{margin-top:12px;padding:12px 14px;background:var(--red);color:#fff;border-radius:var(--radius-sm);font-size:12px;line-height:1.6;display:none}
 .safety-block-warning.show{display:block}
 .safety-block-warning strong{display:block;font-size:13px;margin-bottom:4px}
+@keyframes handoffFlash{0%{box-shadow:0 0 0 0 rgba(194,59,59,0)}25%{box-shadow:0 0 0 4px rgba(194,59,59,.4)}100%{box-shadow:0 0 0 0 rgba(194,59,59,0)}}
+.handoff-flash{animation:handoffFlash 1.4s ease-out}
 
 .sfooter{background:var(--sfa);border-top:1px solid var(--bdl);padding:10px 24px;text-align:center;font-size:11px;color:var(--tc);position:fixed;bottom:0;left:0;right:0;z-index:100}
 
@@ -1686,13 +1688,29 @@ const SAFETY_GATE_HANDOFF = {
 
 function toggleSafetyGate(el,key){
   el.classList.toggle('on');
-  if(el.classList.contains('on')){
+  const turnedOn=el.classList.contains('on');
+  if(turnedOn){
     SAFETY_GATE[key]=true;
   } else {
     delete SAFETY_GATE[key];
   }
   updateSafetyGateWarning();
   updateSafetyGateHandoff();
+  if(turnedOn)scrollToSafetyContent(key);
+}
+
+function scrollToSafetyContent(key){
+  const target=SAFETY_GATE_HANDOFF[key]
+    ? document.getElementById('handoff-'+key)
+    : document.getElementById('safety-block-warning');
+  if(!target)return;
+  setTimeout(function(){
+    const offset=120;
+    const y=target.getBoundingClientRect().top+window.pageYOffset-offset;
+    window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+    target.classList.add('handoff-flash');
+    setTimeout(function(){target.classList.remove('handoff-flash');},1500);
+  },80);
 }
 
 function updateSafetyGateWarning(){
@@ -1705,7 +1723,9 @@ function updateSafetyGateWarning(){
     return;
   }
   const lista=activeKeys.map(k=>`▸ <strong>${SAFETY_GATE_INFO[k].nombre}</strong><br>&nbsp;&nbsp;&nbsp;→ ${SAFETY_GATE_INFO[k].accion}`).join('<br><br>');
-  warn.innerHTML=`<strong>⛔ ETHOS·TX BLOQUEADO — ${activeKeys.length} condición(es) excluyente(s) marcada(s):</strong>${lista}<br><br><span style="font-weight:normal;opacity:.95">Use el protocolo institucional específico. Si NO aplica, desmarque la(s) casilla(s) arriba.</span>`;
+  const hasHandoff=activeKeys.some(k=>SAFETY_GATE_HANDOFF[k]);
+  const nota=hasHandoff?`<br><br><span style="font-weight:normal">⬇ Más abajo aparece una <span style="font-weight:600">tarjeta de derivación segura</span> con qué hacer y la bibliografía oficial.</span>`:``;
+  warn.innerHTML=`<strong>⛔ ETHOS·TX BLOQUEADO — ${activeKeys.length} condición(es) excluyente(s) marcada(s):</strong>${lista}<br><br><span style="font-weight:normal;opacity:.95">Use el protocolo institucional específico. Si NO aplica, desmarque la(s) casilla(s) arriba.</span>${nota}<br><br><span style="font-weight:normal">📖 ¿Quieres el porqué con evidencia? ETHOS·TX tiene un <a onclick="setMode('teach')" style="color:#fff;text-decoration:underline;cursor:pointer;font-weight:600">Modo Docente</a> con la bibliografía oficial de cada escenario.</span>`;
   warn.classList.add('show');
 }
 
@@ -1713,7 +1733,7 @@ function updateSafetyGateHandoff(){
   const cont=document.getElementById('safety-handoff');
   if(!cont)return;
   const activeKeys=Object.keys(SAFETY_GATE).filter(k=>SAFETY_GATE_HANDOFF[k]);
-  cont.innerHTML=activeKeys.map(k=>SAFETY_GATE_HANDOFF[k]).join('');
+  cont.innerHTML=activeKeys.map(k=>'<div id="handoff-'+k+'" style="border-radius:var(--radius)">'+SAFETY_GATE_HANDOFF[k]+'</div>').join('');
 }
 
 function hasSafetyGateBlock(){
