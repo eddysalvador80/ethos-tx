@@ -3,7 +3,7 @@
 // fresca cuando hay conexión; respaldo a la caché si está offline) y CACHE-FIRST
 // para estáticos (íconos, manifest). Así las actualizaciones aparecen solas al
 // abrir la app con internet, sin quedarse pegada en una versión vieja.
-const CACHE = 'ethos-tx-v21';
+const CACHE = 'ethos-tx-v21-1';
 const ASSETS = [
   './',
   './index.html',
