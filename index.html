@@ -219,7 +219,7 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false" oncopy="return false" oncut="return false" onpaste="return false">
 
 <header>
-<div class="logo"><div class="lm">TX</div><span class="lt">ETHOS<em>·TX</em></span><span class="lv" title="v20: verificación y corrección de DOI del corpus docente (Clevenger→10.1002/ejhf.514, Warner→10.1016/j.mayocp.2021.07.017, ICCAMS sustituida por Althoff 2019→10.1097/SLA.0000000000003095). v19: estatus regulatorio andexanet (retiro EE.UU. 22-dic-2025; condicional EMA) + rebote tardío dabigatrán; sincronización de string de versión + corrección de atribución de cita (Kietaibl/ESAIC). v18: Módulo docente A1 Antiagregantes (aspirina, P2Y12, DAPT, stents coronarios) + corrección string versión en timestamp de sesión">v20</span></div>
+<div class="logo"><div class="lm">TX</div><span class="lt">ETHOS<em>·TX</em></span><span class="lv" title="v21: verificación y corrección de DOI del corpus docente (Clevenger→10.1002/ejhf.514, Warner→10.1016/j.mayocp.2021.07.017, ICCAMS sustituida por Althoff 2019→10.1097/SLA.0000000000003095). v19: estatus regulatorio andexanet (retiro EE.UU. 22-dic-2025; condicional EMA) + rebote tardío dabigatrán; sincronización de string de versión + corrección de atribución de cita (Kietaibl/ESAIC). v18: Módulo docente A1 Antiagregantes (aspirina, P2Y12, DAPT, stents coronarios) + corrección string versión en timestamp de sesión">v21</span></div>
 <div class="hb">
   <button class="bh" onclick="window.print()">⎙ Imprimir</button>
   <button class="bh" onclick="nuevoP()" style="background:#dc2626;color:white;border-color:#dc2626;margin-left:8px" title="Limpiar todos los campos y comenzar con un nuevo paciente">🔄 Nuevo paciente</button>
@@ -281,6 +281,38 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 <div class="mode-panel active" id="panel-mtp">
 <div class="sec-title">🩸 Hemorragia activa / MTP</div>
 <div class="sec-sub">Protocolo transfusional perioperatorio · Hospital Hernán Henríquez Aravena v10 · Dic 2024</div><div style="margin:8px 0 2px;display:flex;flex-wrap:wrap;gap:8px"><a onclick="goLearnTx('M1')" style="cursor:pointer;font-size:11px;background:var(--blue-bg);color:var(--br);border:1px solid var(--bdl);padding:3px 9px;border-radius:999px;text-decoration:none;display:inline-block">📖 Aprender: MTP y diamante letal</a><a onclick="goLearnTx('U1')" style="cursor:pointer;font-size:11px;background:var(--blue-bg);color:var(--br);border:1px solid var(--bdl);padding:3px 9px;border-radius:999px;text-decoration:none;display:inline-block">📖 Aprender: umbrales</a><a onclick="goLearnTx('S1')" style="cursor:pointer;font-size:11px;background:var(--blue-bg);color:var(--br);border:1px solid var(--bdl);padding:3px 9px;border-radius:999px;text-decoration:none;display:inline-block">📖 Aprender: cuándo NO usar ETHOS·TX</a></div>
+
+<!-- Scores predictivos TM (v21) -->
+<div class="card" style="border:1px solid var(--bdl)">
+  <div style="font-weight:700;font-size:13px;color:var(--br);margin-bottom:3px">🧮 Scores predictivos de transfusión masiva</div>
+  <div style="font-size:11px;color:var(--tt);margin-bottom:10px">Anticipan la necesidad de TM y permiten activar el MTP precozmente. <b>No deciden</b>: orientan; la activación es criterio clínico.</div>
+  <div style="font-weight:600;font-size:12px;margin:4px 0 5px;color:var(--tc)">ABC score (Nunez 2009) · sin laboratorio</div>
+  <div id="etx-abc-opts" style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--tc)">
+    <label style="cursor:pointer"><input type="checkbox" class="etx-abc" onchange="etxABC()"> Mecanismo penetrante</label>
+    <label style="cursor:pointer"><input type="checkbox" class="etx-abc" onchange="etxABC()"> PAS &le; 90 mmHg</label>
+    <label style="cursor:pointer"><input type="checkbox" class="etx-abc" onchange="etxABC()"> FC &ge; 120 lpm</label>
+    <label style="cursor:pointer"><input type="checkbox" class="etx-abc" onchange="etxABC()"> FAST positivo</label>
+  </div>
+  <div id="etx-abc-out" style="margin-top:9px;font-size:14px;font-weight:700;color:var(--tc)">ABC = 0 / 4</div>
+  <div style="font-weight:600;font-size:12px;margin:16px 0 5px;color:var(--tc)">Índice de Shock (FC / PAS)</div>
+  <div style="display:flex;gap:10px;align-items:center;font-size:12px;color:var(--tc);flex-wrap:wrap">
+    <span>FC <input id="etx-fc" type="number" min="0" oninput="etxSI()" style="width:66px;padding:4px 6px;border:1px solid var(--bd);border-radius:6px"> lpm</span>
+    <span>PAS <input id="etx-pas" type="number" min="0" oninput="etxSI()" style="width:66px;padding:4px 6px;border:1px solid var(--bd);border-radius:6px"> mmHg</span>
+  </div>
+  <div id="etx-si-out" style="margin-top:9px;font-size:14px;font-weight:700;color:var(--tt)">SI = &mdash;</div>
+  <div style="font-size:11px;color:var(--tc);margin-top:14px;line-height:1.5">
+    <b>Comparación (punto de corte):</b><br>
+    &bull; <b>ABC</b> &ge;2 &mdash; clínico, muy rápido, sin laboratorio (S 75% / E 86%) · Nunez 2009<br>
+    &bull; <b>TASH</b> &ge;16 &mdash; clínico+laboratorio+imagen, mayor precisión (PAS, Hb, FC, exceso de base, fracturas, FAST, sexo) · Yücel 2006<br>
+    &bull; <b>TBSS</b> &ge;15 &mdash; añade lactato, evalúa perfusión<br>
+    &bull; <b>Índice de Shock</b> &gt;1,0 &mdash; sugiere hemorragia grave / valorar TM · Lier 2024
+  </div>
+  <div style="font-size:10px;color:var(--tt);margin-top:7px;line-height:1.5">Fuentes: Nunez TC, J Trauma 2009 (DOI 10.1097/TA.0b013e3181961c35) · Yücel N, J Trauma 2006 (DOI 10.1097/01.ta.0000220386.84012.bf) · Lier H, Curr Opin Anaesthesiol 2024 (DOI 10.1097/ACO.0000000000001347).</div>
+</div>
+<script>
+function etxABC(){var n=document.querySelectorAll('#etx-abc-opts .etx-abc:checked').length;var o=document.getElementById('etx-abc-out');o.innerHTML='ABC = '+n+' / 4'+(n>=2?'  &rarr;  &ge;2: considerar activar MTP':'');o.style.color=(n>=2?'#dc2626':'var(--tc)');}
+function etxSI(){var fc=parseFloat(document.getElementById('etx-fc').value),pas=parseFloat(document.getElementById('etx-pas').value),o=document.getElementById('etx-si-out');if(!fc||!pas){o.innerHTML='SI = &mdash;';o.style.color='var(--tt)';return;}var si=fc/pas,m=si>1?'  &rarr;  &gt;1,0: hemorragia grave / valorar TM':(si>0.9?'  &rarr;  &gt;0,9: anormal':'  &rarr;  normal');o.innerHTML='SI = '+si.toFixed(2)+m;o.style.color=(si>1?'#dc2626':(si>0.9?'#b45309':'#166534'));}
+</script>
 
 <!-- Criterios MTP HHHA -->
 <div class="card" style="border:2px solid var(--red);background:#fff5f5">
@@ -1450,7 +1482,7 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 
 </div>
 
-<div class="sfooter">ETHOS·TX v20 · Safety Gate + CHA₂DS₂-VA (ESC 2024) + Caprini (ACCP 2012) + Módulo Docente · Protocolo HHHA v10 · Lumina Health AI · Dr. E. Salvador Moreno · 2026 · <strong style="color:var(--orange)">PROTOTIPO EN VALIDACIÓN</strong></div>
+<div class="sfooter">ETHOS·TX v21 · Safety Gate + CHA₂DS₂-VA (ESC 2024) + Caprini (ACCP 2012) + Módulo Docente · Protocolo HHHA v10 · Lumina Health AI · Dr. E. Salvador Moreno · 2026 · <strong style="color:var(--orange)">PROTOTIPO EN VALIDACIÓN</strong></div>
 
 <script>
 // ═══ PROTECCIÓN ANTI-COPIA ═══
@@ -6400,7 +6432,7 @@ const TUTOR_KB=[
 {id:'NATA',cita:'New HV et al. (BCSH/NATA 2016)',titulo:'Guidelines on transfusion for fetuses, neonates and older children',doi:'10.1111/bjh.14233',tema:'Guía de transfusión en feto, neonato y niños. Umbrales específicos por edad y peso, distintos del adulto. Considerar volumen circulante reducido y dosificación en mL/kg.'},
 {id:'Ramirez-2026',cita:'Ramírez G, Basso L et al. (Rev Chil Anest 2026)',titulo:'Trastornos de coagulación en la paciente obstétrica',doi:'10.25237/revchilanestv55n3-04',tema:'Coagulopatía en la paciente obstétrica. El embarazo induce estado procoagulante: el fibrinógeno se eleva a 4-6 g/L al término, por lo que un fibrinógeno de 2,5 g/L es bajo en una embarazada. TP/TTPa normales no descartan coagulopatía en HPP activa. El fibrinógeno es el marcador más precoz y sensible.'},
 {id:'WHO-PPH-2012',cita:'WHO (2012)',titulo:'WHO recommendations for the prevention and treatment of postpartum haemorrhage',doi:'',url:'https://www.who.int/publications/i/item/9789241548502',tema:'Recomendaciones OMS para prevención y tratamiento de HPP. Prevención: oxitocina 10 UI IV/IM en el alumbramiento (primera elección). Tratamiento escalonado: oxitocina + masaje uterino, luego ergometrina/misoprostol, cristaloides, TXA, tamponamiento intrauterino y cirugía si refractaria.'},
-{id:'CPOC-2025',cita:'Centre for Perioperative Care (CPOC 2025)',titulo:'Guideline for the Management of Anaemia in the Perioperative Pathway',doi:'',url:'https://www.cpoc.org.uk/anaemia-perioperative-pathway',tema:'Guía CPOC de manejo de anemia en la vía perioperatoria. Detectar y tratar la anemia con antelación a la cirugía electiva; hierro IV si el oral no es tolerado o el tiempo es corto; evitar la transfusión como tratamiento de primera línea de la anemia.'}
+{id:'CPOC-2025',cita:'Centre for Perioperative Care (CPOC 2025)',titulo:'Guideline for the Management of Anaemia in the Perioperative Pathway',doi:'',url:'https://www.cpoc.org.uk/anaemia-perioperative-pathway',tema:'Guía CPOC de manejo de anemia en la vía perioperatoria. Detectar y tratar la anemia con antelación a la cirugía electiva; hierro IV si el oral no es tolerado o el tiempo es corto; evitar la transfusión como tratamiento de primera línea de la anemia.'},{id:'Lier-MTP-2024',cita:'Lier H, Hossfeld B. Curr Opin Anaesthesiol. 2024;37:117-124',titulo:'Massive transfusion in trauma',doi:'10.1097/ACO.0000000000001347',tema:'Transfusión masiva = mayor o igual a 3-4 concentrados de glóbulos rojos en 1 hora. Control precoz de la hemorragia más corrección de las alteraciones metabólicas, incluida la HIPOCALCEMIA (cuarto vértice del diamante letal, con objetivo de calcio iónico). Sustitución guiada por ensayos viscoelásticos: ácido tranexámico, fibrinógeno, glóbulos rojos, plasma y plaquetas 1:1:1; alternativa de sangre total; rescate con complejo protrombínico, factor XIII o desmopresina.'},{id:'Curry-VHA-2018',cita:'Curry NS, et al. Br J Haematol. 2018;182:789-806',titulo:'Viscoelastic haemostatic assays in major bleeding (BSH Guideline)',doi:'10.1111/bjh.15524',tema:'Los tests estándar (TP/INR, TTPa) son lentos (27-77 min) y poco sensibles; los ensayos viscoelásticos (TEG, ROTEM, Sonoclot) detectan y dirigen la corrección de la coagulopatía más rápido. Recomendaciones prácticas en cuatro escenarios: hemorragia obstétrica, hepática, cirugía cardíaca y traumática.'},{id:'ABC-Nunez-2009',cita:'Nunez TC, et al. J Trauma. 2009;66:346-352',titulo:'Early prediction of massive transfusion: simple as ABC',doi:'10.1097/TA.0b013e3181961c35',tema:'ABC score (Assessment of Blood Consumption) para predecir transfusión masiva en trauma. Cuatro parámetros sin laboratorio, 1 punto cada uno: mecanismo penetrante, FAST positivo, PAS menor o igual a 90 mmHg, FC mayor o igual a 120 lpm. Un puntaje mayor o igual a 2 predice transfusión masiva con sensibilidad 75% y especificidad 86%; permite activar el protocolo de transfusión masiva precozmente, a pie de cama.'},{id:'TASH-Yucel-2006',cita:'Yücel N, et al. J Trauma. 2006;60:1228-1236',titulo:'Trauma Associated Severe Hemorrhage (TASH) Score',doi:'10.1097/01.ta.0000220386.84012.bf',tema:'TASH score para estimar la probabilidad de transfusión masiva tras politraumatismo. Siete variables ponderadas (0-28 puntos): PAS, hemoglobina, líquido intraabdominal, fracturas de huesos largos o pelvis, FC, exceso de base y sexo masculino; punto de corte mayor o igual a 16. Mayor precisión que el ABC pero requiere laboratorio.'}
 ];
 
 var TUTOR_HISTORY=[];
