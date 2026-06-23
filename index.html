@@ -214,6 +214,18 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 @media(max-width:600px){.app{padding:16px 12px 110px}.card{padding:14px}.fg2,.fg3{grid-template-columns:1fr}.rp{padding:5px 10px;font-size:11px}.cki{font-size:11px}header{padding:0 14px}.lv{display:none}.mode-sel{padding:8px 12px}.mt{padding:6px 12px;font-size:11px}.trace{flex-direction:column;gap:6px}.comp-row{flex-direction:column;gap:4px}.comp-rl{width:auto}}
 @media print{header,.disc,.mode-sel,.sfooter,.hem-ban,.gate,.bs,.safety-gate{display:none}.app{max-width:100%;padding:0}.tp{display:block!important}body{background:#fff;font-size:12px}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.anim{animation:fadeIn .3s ease-out both}
+/* ── Referencia ── */
+.ref-subtabs{display:flex;gap:6px;margin:0 0 14px}
+.ref-subtab{flex:1 1 0;border:1px solid var(--bdl);background:var(--bgw);border-radius:9px;padding:9px 6px;font-size:.85rem;font-weight:700;cursor:pointer;color:var(--tt)}
+.ref-subtab.sel{border-color:var(--br);background:var(--blue-bg);color:var(--br)}
+.ref-search{width:100%;padding:10px 13px;border:1px solid var(--bdl);border-radius:var(--radius-sm);font-size:.92rem;background:var(--bgw);color:var(--ts);margin-bottom:6px;box-sizing:border-box}
+.ref-hint{font-size:.74rem;color:var(--tt);margin:0 0 12px;line-height:1.4}
+.ref-group{margin-bottom:10px}
+.ref-secn{font-size:.72rem;color:var(--ts);text-transform:uppercase;letter-spacing:.06em;margin:16px 0 8px;font-weight:700;border-bottom:1px solid var(--bdl);padding-bottom:4px}
+.ref-item{padding:9px 2px;border-bottom:1px solid var(--bdl);font-size:.88rem;line-height:1.45}
+.ref-item b{color:var(--br)}
+.ref-item .refs{font-size:.74rem;color:var(--tt);margin-top:3px}
+.ref-item .refs a.rt{color:var(--br);text-decoration:none;border-bottom:1px dotted var(--br)}
 </style>
 </head>
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false" oncopy="return false" oncut="return false" onpaste="return false">
@@ -233,6 +245,7 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
   <button class="mt" data-mode="timing" onclick="setMode('timing')">🕐 Timing Anticoagulación</button>
   <button class="mt" data-mode="teach" onclick="setMode('teach')">🎓 Docente</button>
   <button class="mt" data-mode="calc" onclick="setMode('calc')">💉 Calculadora</button>
+  <button class="mt" data-mode="ref" onclick="setMode('ref')">📖 Referencia</button>
 </div>
 
 <div class="disc">⚠ <strong>PROTOTIPO EN VALIDACIÓN — Herramienta de apoyo clínico.</strong> No reemplaza el juicio del médico ni el Protocolo institucional vigente. Alineada con Protocolo HHHA PR-BS-0113/GCL1.7 v10 (dic 2024) + evidencia internacional (PAUSE 2019, ASRA 2025, ACCP 2022, AHA/ACC 2024, ESAIC/ESRA 2022, ESC 2022, BRIDGE 2015). Validación institucional formal pendiente.</div>
@@ -1482,6 +1495,8 @@ function etxSI(){var fc=parseFloat(document.getElementById('etx-fc').value),pas=
 
 </div>
 
+<div class="mode-panel" id="panel-ref"><div id="ref-tx-container"></div></div>
+
 <div class="sfooter">ETHOS·TX v21 · Safety Gate + CHA₂DS₂-VA (ESC 2024) + Caprini (ACCP 2012) + Módulo Docente · Protocolo HHHA v10 · Lumina Health AI · Dr. E. Salvador Moreno · 2026 · <strong style="color:var(--orange)">PROTOTIPO EN VALIDACIÓN</strong></div>
 
 <script>
@@ -1639,7 +1654,20 @@ const RF={
   'Moretti-2015':{ s:'Moretti D et al. (Blood 2015)', f:'Oral iron supplements increase hepcidin and decrease iron absorption from daily or twice-daily doses in iron-depleted young women', d:'10.1182/blood-2015-05-642223', p:'26289639'},
   // PROTOCOLO INSTITUCIONAL HHHA
   'HHHA-v10':{ s:'HHHA (Res. Exenta N°12648, dic 2024)', f:'Protocolo de solicitud e indicación médica de la transfusión, código PR-BS-0113/GCL1.7, versión 10, vigencia diciembre 2029. Hospital Dr. Hernán Henríquez Aravena, Temuco.', u:'https://www.hhha.cl/'},
-  'SSASUR':{ s:'SSASUR (Servicio Salud Araucanía Sur)', f:'Protocolo de Ahorro de Sangre — Programa PBM regional. Referenciado en Protocolo HHHA PR-BS-0113/GCL1.7 v10 para anemia preoperatoria de cirugía electiva postergable.', u:'https://www.ssasur.cl/'}
+  'SSASUR':{ s:'SSASUR (Servicio Salud Araucanía Sur)', f:'Protocolo de Ahorro de Sangre — Programa PBM regional. Referenciado en Protocolo HHHA PR-BS-0113/GCL1.7 v10 para anemia preoperatoria de cirugía electiva postergable.', u:'https://www.ssasur.cl/'},
+  // Safety Gate refs
+  'AHA-ICH-2022':{ s:'Greenberg SM et al. (AHA/ASA 2022)', f:'2022 Guideline for the Management of Patients With Spontaneous Intracerebral Hemorrhage', d:'10.1161/STR.0000000000000407', p:'35579034'},
+  'CODE-ICH-2024':{ s:'Sheth KN et al. (Stroke 2024)', f:'Code ICH: A Multidisciplinary Protocol for the Management of Intracerebral Hemorrhage', d:'10.1161/STROKEAHA.123.043033', p:'37924487'},
+  'MILLING-2020':{ s:'Milling TJ, Pollack CV (AJEM 2020)', f:'A review of guidelines on anticoagulation reversal across different clinical scenarios', d:'10.1016/j.ajem.2020.05.086', p:'32405177'},
+  'NEGARGAR-2025':{ s:'Negargar S et al. (GMJ 2025)', f:'Management of Coagulopathy in Cardiac Surgery: A Review', d:'10.31661/gmj.v14i.3981', p:''},
+  'SCA-2021':{ s:'Raphael J et al. (SCA/APSF 2021)', f:'Society of Cardiovascular Anesthesiologists Expert Consensus Statement for the Management of the Refractory Massive Hemorrhage', d:'10.1213/ANE.0000000000005553', p:'34270530'},
+  'TEG-ROTEM-2026':{ s:'Harter K et al. (Am J Hematol 2026)', f:'Viscoelastic testing in perioperative and critical care medicine: A narrative review', d:'10.1002/ajh.70074', p:''},
+  'GEMELLI-2023':{ s:'Gemelli C et al. (Curr Probl Cardiol 2023)', f:'Outcomes of open heart surgery in Jehovah\'s Witnesses: systematic review and meta-analysis', d:'10.1016/j.cpcardiol.2023.102078', p:'37536456'},
+  'COSTANZO-2020':{ s:'Costanzo M et al. (BMC Anesthesiol 2020)', f:'Bloodless hepatic surgery: case series and review of the literature', d:'10.1186/s12871-020-0945-x', p:'31996141'},
+  'AL-ATTAR-2023':{ s:'Al-Attar N et al. (J Cardiothorac Surg 2023)', f:'Patient blood management in cardiac surgery: a systematic review', d:'10.1186/s13019-023-02195-4', p:''},
+  'LISMAN-ISTH-2021':{ s:'Lisman T, Porte RJ (JTH/ISTH 2021)', f:'Rebalanced hemostasis in patients with liver disease: evidence and clinical consequences', d:'10.1111/jth.15239', p:'33655612'},
+  'LISMAN-ASH-2023':{ s:'Lisman T (ASH Hematology 2023)', f:'Coagulation abnormalities in patients with end-stage liver disease', d:'10.1182/hematology.2023000479', p:'38066402'},
+  'GARCIA-2025':{ s:'García Rodríguez JC et al. (Med Intensiva 2025)', f:'Perioperative management of hemostasis in liver transplantation: clinical practice algorithm', d:'10.1016/j.medin.2025.502216', p:''}
 };
 function rt(k){if(!RF[k])return '';const u=RF[k].u?RF[k].u:`https://doi.org/${RF[k].d}`;return `<a class="rt" href="${u}" target="_blank" title="${RF[k].f}">${RF[k].s||k}</a>`;}
 
@@ -1815,6 +1843,7 @@ function setMode(m){
     console.error('[ETHOS·TX] Panel no encontrado: panel-'+m);
   }
   if(m==='teach')renderSim();
+  if(m==='ref')renderReferenciaTx();
   console.log('[ETHOS·TX v9.4] Modo activo:',m);
 }
 function u1(){
@@ -6741,6 +6770,182 @@ function tutorSend(){
     btn.disabled=false;
     inp.focus();
   });
+}
+
+// ═══ REFERENCIA ═══
+const TX_GLOSARIO=[
+  {c:'Hemorragia y transfusión',e:[
+    ['MTP','Protocolo de transfusión masiva: reposición rápida 1:1:1 (GR:PFC:PLT) en hemorragia masiva.'],
+    ['GR','Glóbulos rojos (concentrado eritrocitario). 1 unidad ≈ sube Hb 1 g/dL.'],
+    ['PFC','Plasma fresco congelado. Repone factores de coagulación; dosis 15 mL/kg.'],
+    ['PLQ / PLT','Plaquetas. Aféresis (1 unidad). Umbral cirugía activa: 50×10³; SNC/CEC/ECMO: 100×10³.'],
+    ['TXA','Ácido tranexámico: antifibrinolítico. Trauma: 1 g IV <3 h (CRASH-2). HPP: 1 g <3 h del parto (WOMAN).'],
+    ['GR O-neg','Glóbulos rojos O Rh negativo universal: uso en emergencia sin pruebas cruzadas.'],
+    ['Tríada letal','Hipotermia + acidosis + coagulopatía: se potencian mutuamente; romperla es el objetivo del MTP.'],
+    ['Ratio 1:1:1','Relación GR:PFC:PLT empírica para trauma masivo. PROPPR 2015: ↓mortalidad vs 1:1:2.'],
+    ['Umbral restrictivo','Transfundir GR si Hb <7 g/dL (sin enfermedad cardíaca). No transfundir para normalizar.'],
+    ['Umbral liberal','Hb <8 g/dL en contexto cardíaco (SCA, TAVI) o TCE — MINT 2023.'],
+    ['FIBTEM / A5','Parámetro ROTEM que estima fibrinógeno funcional a pie de cama. Guía la reposición en MTP.'],
+    ['Goal-directed','Reposición guiada por metas de viscoelastometría (ROTEM/TEG), no por ratios fijos.'],
+    ['DB','Déficit de base. DB <−6 mEq/L = shock metabólico establecido.'],
+    ['ABC score','Assessment of Blood Consumption: FC≥120, PAS≤90, mecanismo penetrante, FAST positivo. ≥2 = activar MTP.'],
+    ['Índice de Shock','FC/PAS sistólica. ≥1.0 alerta; ≥1.4 = alta probabilidad de MTP.']
+  ]},
+  {c:'Anticoagulación y reversión',e:[
+    ['DOAC / ACOD','Anticoagulante oral directo: rivaroxabán (anti-Xa), apixabán (anti-Xa), dabigatrán (anti-IIa), edoxabán (anti-Xa).'],
+    ['AVK','Antagonistas de vitamina K: warfarina, acenocumarol. Revertir con CCP-4F + vitamina K.'],
+    ['HBPM','Heparina de bajo peso molecular (enoxaparina). Profiláctica ≥12 h pre-punción; terapéutica ≥24 h.'],
+    ['HNF','Heparina no fraccionada IV: ≥4–6 h + TTPa normal antes de procedimiento.'],
+    ['CCP-4F','Concentrado de complejo protrombínico de 4 factores. Revierte AVK y anti-Xa (off-label).'],
+    ['Idarucizumab','Antídoto específico del dabigatrán (5 g IV). Revierte en minutos.'],
+    ['Andexanet alfa','Antídoto de anti-Xa (rivaroxabán/apixabán). CCP-4F off-label es alternativa de menor coste.'],
+    ['Protamina','Revierte HNF (100%) y HBPM (parcial: ~60–80% anti-IIa).'],
+    ['INR','Razón internacional normalizada. Mide efecto de AVK. <1.5 = seguro para procedimiento.'],
+    ['TTPa','Tiempo de tromboplastina parcial activada. Mide HNF; puede normalizarse pese a HBPM residual.'],
+    ['anti-Xa','Actividad anti-factor Xa; mide HBPM. ≤0.1 UI/mL = efecto indetectable.'],
+    ['PAUSE','Ensayo 2019: pausa simple de DOAC (1–2 días) sin bridging en FA de riesgo bajo-moderado.'],
+    ['Bridging','Anticoagulación puente con HBPM. No recomendado de rutina (BRIDGE trial).'],
+    ['CHA₂DS₂-VA','Score riesgo ACV en FA (sin sexo). <2 = bajo riesgo. Guía urgencia de reinicio postoperatorio.'],
+    ['Caprini','Score riesgo TEV perioperatorio. ≥5 puntos = alto riesgo → tromboprofilaxis obligatoria.']
+  ]},
+  {c:'Scores, tests y protocolos',e:[
+    ['ATLS','Advanced Trauma Life Support. Clases de hemorragia I–IV por % volemia perdida.'],
+    ['ROTEM','Tromboelastometría rotacional: test viscoelástico. Parámetros: CT, CFT, MCF, ML (FIBTEM/EXTEM/INTEM).'],
+    ['TEG','Tromboelastografía. Parámetros: R, K, α, MA, LY30. Equivalente funcional al ROTEM.'],
+    ['ACT','Activated Clotting Time. Guía la titulación de protamina al salir de CEC. Meta ≈90–130 seg.'],
+    ['FAST','Focused Assessment with Sonography in Trauma. FAST positivo = líquido libre intraabdominal.']
+  ]},
+  {c:'Anemia perioperatoria',e:[
+    ['Hb','Hemoglobina (g/dL). <13 hombre / <12 mujer = anemia (OMS).'],
+    ['Ferritina','Reserva de hierro. <30 µg/L = ferropenia absoluta. Reactante de fase aguda: sube con inflamación.'],
+    ['TSAT','Saturación de transferrina. <20% = ferropenia funcional (útil si ferritina elevada por PCR alta).'],
+    ['Fe EV','Hierro intravenoso (carboximaltosa férrica). Corrección en 3–4 sem; dosis única hasta 1000 mg.'],
+    ['EPO','Eritropoyetina. Estimula eritropoyesis; útil si ferropenia corregida pero Hb persiste baja.'],
+    ['PBM','Patient Blood Management: tratar anemia + reducir pérdida + tolerar anemia → ↓transfusiones.'],
+    ['VCM','Volumen corpuscular medio. Bajo = microcitosis (ferropenia); normal con TSAT baja = ferropenia funcional.']
+  ]},
+  {c:'Escenarios excluidos (Safety Gate)',e:[
+    ['CEC','Circulación extracorpórea. Coagulopatía propia (hemodilución + heparinización + hiperfibrinólisis). El MTP 1:1:1 no aplica.'],
+    ['Hemostasia reequilibrada','En hepatopatía severa: ↓ procoagulantes PERO TAMBIÉN ↓ anticoagulantes naturales (Prot C/S, AT). INR no predice sangrado.'],
+    ['PFC profiláctico','Contraindicado en hepatopatía: eleva presión portal y puede precipitar o empeorar el sangrado.'],
+    ['Bloodless Medicine','Cirugía sin hemoderivados (Testigos de Jehová). Requiere programa PBM especializado. Autonomía legal.'],
+    ['ICH','Hemorragia intracraneal. Prioridad: revertir anticoagulación + PA <140–150 mmHg. MTP 1:1:1 no aplica.']
+  ]},
+  {c:'Sociedades y guías',e:[
+    ['ESAIC','European Society of Anaesthesiology and Intensive Care. Guía major bleeding 2022/2023.'],
+    ['AABB','Association for the Advancement of Blood & Biotherapies. Guías GR 2023, Plaquetas 2025.'],
+    ['ISTH','International Society on Thrombosis and Haemostasis. Reversión DOAC, hemofilia, hepatopatía.'],
+    ['ASH','American Society of Hematology.'],
+    ['ASRA','American Society of Regional Anesthesia. Guía anticoagulación/neuraxial 5.ª ed. 2025.'],
+    ['WFH','World Federation of Hemophilia. Guía manejo hemofilia 3.ª ed. 2020.'],
+    ['AHA/ASA','American Heart Association / American Stroke Association. Guía ICH 2022.'],
+    ['SCA','Society of Cardiovascular Anesthesiologists. Guía PBM cardíaco 2021.']
+  ]},
+  {c:'Local (Chile)',e:[
+    ['HHHA','Hospital Hernán Henríquez Aravena (Temuco). Protocolo PR-BS-0113/GCL1.7 v10 (dic 2024).'],
+    ['SSASUR','Servicio de Salud Araucanía Sur. Protocolo de Ahorro de Sangre — PBM regional.']
+  ]}
+];
+
+const TX_TEMARIO=[
+  {c:'🩸 Hemorragia / MTP',e:[
+    ['Ratio 1:1:1 vs 1:1:2 en trauma masivo','GR:PFC:PLT en relación 1:1:1 reduce mortalidad vs 1:1:2 en trauma masivo.',['PROPPR']],
+    ['Criterios de activación del MTP','≥30% volemia perdida (ATLS clase III) o choque + Hb<7; ABC score ≥2.',['Rossaint','PROPPR']],
+    ['Ácido tranexámico en trauma (CRASH-2)','1 g IV en 10 min <3 h; 2.ª dosis a las 8 h. Beneficio depende de la ventana temporal.',['CRASH-2']],
+    ['TXA en hemorragia obstétrica (WOMAN)','1 g IV si HPP <3 h del parto. Mismo fármaco, ventana diferente al trauma.',['WOMAN']],
+    ['Tríada letal: hipotermia / acidosis / coagulopatía','Prevenir hipotermia, corregir acidosis, reponer calcio. Cada elemento amplifica los otros.',['Rossaint']],
+    ['Plaquetas: guía AABB/ICTMG 2025','Umbrales actualizados por escenario. Contraindicadas en PTT/HIT.',['AABB-PLT-2025']],
+    ['ABC score e Índice de Shock','Herramientas clínicas para activar MTP antes de tener laboratorio.',['PROPPR','Rossaint']],
+    ['Guía ESAIC major bleeding 2023','Marco europeo: manejo de hemorragia y coagulopatía perioperatoria — 6.ª edición.',['Rossaint']]
+  ]},
+  {c:'🔬 Umbrales transfusionales',e:[
+    ['GR: umbral restrictivo <7 g/dL (AABB 2023)','Seguro en cirugía y UCI general. No transfundir para normalizar cifra.',['Carson-RBC']],
+    ['GR: umbral cardíaco <8 g/dL — MINT 2023','En infarto activo o riesgo CV alto, el umbral liberal no supera al restrictivo en mortalidad.',['MINT']],
+    ['Plaquetas: umbrales por escenario (2025)','<10 estable; <50 cirugía activa; >100 en SNC/CEC/ECMO.',['AABB-PLT-2025','HHHA-v10']],
+    ['PFC: indicaciones y contraindicaciones','INR>1.5 + sangrado activo. NO profiláctico (especialmente en hepatopatía).',['Rossaint','PROPPR']],
+    ['Protocolo HHHA v10 (dic 2024)','Documento institucional vinculante: umbrales, solicitud, auditoría. Vigencia dic 2029.',['HHHA-v10']]
+  ]},
+  {c:'💊 Coagulopatía / Reversión',e:[
+    ['Reversión de DOAC — ESAIC 2024 / ISTH 2024','Dabigatrán → idarucizumab; anti-Xa → andexanet alfa o CCP-4F off-label.',['ESAIC-DOAC','ISTH-2024']],
+    ['Reversión de AVK (warfarina)','CCP-4F + vitamina K IV. Objetivo INR <1.5. El PFC solo es insuficiente.',['Rossaint']],
+    ['Reversión de HNF y HBPM','Protamina: 1 mg/100 U heparina (HNF) o mg por mg enoxaparina (parcial).',['Rossaint']],
+    ['Coagulopatía obstétrica (CID en gestante)','Fibrinógeno cae primero; meta >200 mg/dL; crioprecipitado o concentrado de fibrinógeno.',['Ramirez-2026']]
+  ]},
+  {c:'🕐 Timing Anticoagulación',e:[
+    ['Protocolo PAUSE 2019','FA de riesgo bajo-moderado: pausa simple de DOAC (1–2 días) sin HBPM puente.',['ISTH-2024']],
+    ['CHA₂DS₂-VA: riesgo de ACV en FA','Guía la urgencia de reiniciar la anticoagulación postoperatoria.',['ESAIC-DOAC']],
+    ['Score Caprini: riesgo TEV perioperatorio','≥5 puntos = alto riesgo → tromboprofilaxis farmacológica obligatoria.',['HHHA-v10']]
+  ]},
+  {c:'🚫 Safety Gate — Escenarios excluidos',e:[
+    ['Hemofilia y coagulopatías hereditarias','Factor deficiente específico + Hematología. El MTP estándar no aplica.',[]],
+    ['Hemorragia obstétrica masiva (HPP)','MTP obstétrico; TXA <3 h del parto; fibrinógeno es la meta principal.',['WOMAN','Ramirez-2026']],
+    ['ICH: sangrado intracraneal activo','Revertir anticoagulación URGENTE. PA <140–150 mmHg. Neurocirugía urgente.',['AHA-ICH-2022','CODE-ICH-2024','MILLING-2020']],
+    ['CEC: cirugía cardíaca con CEC','Coagulopatía de bomba: ROTEM/TEG guía; protamina por ACT; TXA profiláctico.',['NEGARGAR-2025','SCA-2021','TEG-ROTEM-2026']],
+    ['Rechazo transfusional / Bloodless Medicine','Autonomía legal; Fe EV + EPO preop; cell salvage + TXA; derivar a centro PBM especializado.',['GEMELLI-2023','COSTANZO-2020','AL-ATTAR-2023']],
+    ['Trasplante hepático: hemostasia reequilibrada','INR no predice sangrado; no PFC profiláctico; ROTEM/TEG obligatorio.',['LISMAN-ISTH-2021','LISMAN-ASH-2023','GARCIA-2025','TEG-ROTEM-2026']]
+  ]},
+  {c:'🔬 Anemia perioperatoria',e:[
+    ['Anemia preop: impacto en mortalidad quirúrgica','Cada g/dL de Hb menos aumenta el riesgo. Tratar siempre antes de cirugía electiva.',['Fowler-2015']],
+    ['Hierro IV: eficacia en corrección preop','Carboximaltosa: corrección en 3–4 sem; dosis única hasta 1000 mg.',['Clevenger-2016']],
+    ['Hierro oral: días alternos son más efectivos','Dosis alternas mejoran absorción (↓hepcidina). Stoffel 2017.',['Stoffel-2017']],
+    ['PBM multimodal (3 pilares) — Althoff 2019','Tratar anemia + reducir pérdida + tolerar anemia → ↓transfusiones y complicaciones.',['Althoff-2019']],
+    ['Guía CPOC 2025: anemia perioperatoria','Marco europeo actualizado para diagnóstico y tratamiento de la anemia preoperatoria.',['CPOC-2025']],
+    ['Protocolo HHHA/SSASUR: anemia en electiva','Fe EV si Hb <13 g/dL y hay ≥3 semanas antes de la cirugía.',['HHHA-v10','SSASUR']]
+  ]}
+];
+
+let REF_TX_SUB='temario';
+function renderReferenciaTx(){
+  var c=document.getElementById('ref-tx-container');
+  if(!c)return;
+  var h='<div class="card"><div class="card-title">📖 Referencia</div>';
+  h+='<div class="ref-subtabs">';
+  h+='<button class="ref-subtab'+(REF_TX_SUB==='temario'?' sel':'')+'" onclick="setRefSubTx(\'temario\')">📚 Temario</button>';
+  h+='<button class="ref-subtab'+(REF_TX_SUB==='siglas'?' sel':'')+'" onclick="setRefSubTx(\'siglas\')">🔤 Siglas</button>';
+  h+='</div>';
+  h+='<div id="ref-tx-body">'+(REF_TX_SUB==='siglas'?glosarioTxHTML():temarioTxHTML())+'</div>';
+  h+='</div>';
+  c.innerHTML=h;
+}
+function setRefSubTx(s){REF_TX_SUB=s;renderReferenciaTx();window.scrollTo(0,0);}
+function filtrarRefTx(){
+  var qel=document.getElementById('ref-tx-q'),q=(qel?qel.value:'').toLowerCase().trim();
+  document.querySelectorAll('#ref-tx-body .ref-group').forEach(function(g){
+    var any=false;
+    g.querySelectorAll('.ref-item').forEach(function(it){
+      var show=!q||it.getAttribute('data-k').indexOf(q)>=0;
+      it.style.display=show?'':'none';
+      if(show)any=true;
+    });
+    g.style.display=any?'':'none';
+  });
+}
+function glosarioTxHTML(){
+  var h='<input type="text" id="ref-tx-q" class="ref-search" placeholder="🔎 Buscar sigla o término…" oninput="filtrarRefTx()">';
+  h+='<p class="ref-hint">Todas las siglas y términos de la app, agrupados. Escribe para filtrar.</p>';
+  TX_GLOSARIO.forEach(function(g){
+    h+='<div class="ref-group"><div class="ref-secn">'+g.c+'</div>';
+    g.e.forEach(function(it){
+      var k=(it[0]+' '+it[1]).toLowerCase();
+      h+='<div class="ref-item" data-k="'+k+'"><b>'+it[0]+'</b> — '+it[1]+'</div>';
+    });
+    h+='</div>';
+  });
+  return h;
+}
+function temarioTxHTML(){
+  var h='<input type="text" id="ref-tx-q" class="ref-search" placeholder="🔎 Buscar tema…" oninput="filtrarRefTx()">';
+  h+='<p class="ref-hint">Cada tema de la app con el paper que lo respalda. Bibliografía verificada.</p>';
+  TX_TEMARIO.forEach(function(g){
+    h+='<div class="ref-group"><div class="ref-secn">'+g.c+'</div>';
+    g.e.forEach(function(it){
+      var k=(it[0]+' '+it[1]).toLowerCase();
+      var refsStr=(it[2]||[]).filter(Boolean).map(function(r){return rt(r);}).filter(Boolean).join(' · ');
+      h+='<div class="ref-item" data-k="'+k+'"><b>'+it[0]+'</b> — '+it[1]+(refsStr?'<div class="refs">'+refsStr+'</div>':'')+'</div>';
+    });
+    h+='</div>';
+  });
+  return h;
 }
 
 </script>
