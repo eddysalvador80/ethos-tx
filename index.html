@@ -231,7 +231,7 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false" oncopy="return false" oncut="return false" onpaste="return false">
 
 <header>
-<div class="logo"><div class="lm">TX</div><span class="lt">ETHOS<em>·TX</em></span><span class="lv" title="v21: verificación y corrección de DOI del corpus docente (Clevenger→10.1002/ejhf.514, Warner→10.1016/j.mayocp.2021.07.017, ICCAMS sustituida por Althoff 2019→10.1097/SLA.0000000000003095). v19: estatus regulatorio andexanet (retiro EE.UU. 22-dic-2025; condicional EMA) + rebote tardío dabigatrán; sincronización de string de versión + corrección de atribución de cita (Kietaibl/ESAIC). v18: Módulo docente A1 Antiagregantes (aspirina, P2Y12, DAPT, stents coronarios) + corrección string versión en timestamp de sesión">v21</span></div>
+<div class="logo"><div class="lm">TX</div><span class="lt">ETHOS<em>·TX</em></span><span class="lv" title="v24: integrada la tabla de anticoagulación/antiplaquetarios como sub-tab «Fármacos» en el módulo Referencia (anticoagulantes, antiplaquetarios, neuroeje ASRA 5.ª ed. y ventana DES) con citación a ASRA/ESC/AHA-ACC/PAUSE/ACCP/BRIDGE/POISE-2. v23: enlaces a protocolos institucionales corregidos — las citas de los protocolos HHHA (transfusión v10) y SSASUR (ahorro de sangre) ahora abren el PDF del protocolo correspondiente (ruta relativa protocolos/…), no la página genérica del hospital. v22: corrección del módulo de timing neuroaxial — distinción dosis baja/alta en anti-Xa según ASRA 5.ª ed. (Kopp 2025, rapm-2024-105766): rivaroxabán baja 24h (30h si CrCl<30)/alta 72h; apixabán baja 36h/alta 72h; dabigatrán baja 48h. Normalización de citas «ASRA 2024»→«ASRA 2025». v21: verificación y corrección de DOI del corpus docente (Clevenger→10.1002/ejhf.514, Warner→10.1016/j.mayocp.2021.07.017, ICCAMS sustituida por Althoff 2019→10.1097/SLA.0000000000003095). v19: estatus regulatorio andexanet (retiro EE.UU. 22-dic-2025; condicional EMA) + rebote tardío dabigatrán; sincronización de string de versión + corrección de atribución de cita (Kietaibl/ESAIC). v18: Módulo docente A1 Antiagregantes (aspirina, P2Y12, DAPT, stents coronarios) + corrección string versión en timestamp de sesión">v24</span></div>
 <div class="hb">
   <button class="bh" onclick="window.print()">⎙ Imprimir</button>
   <button class="bh" onclick="nuevoP()" style="background:#dc2626;color:white;border-color:#dc2626;margin-left:8px" title="Limpiar todos los campos y comenzar con un nuevo paciente">🔄 Nuevo paciente</button>
@@ -1000,7 +1000,7 @@ function etxSI(){var fc=parseFloat(document.getElementById('etx-fc').value),pas=
 <!-- ═══ MODE 4: TIMING ANTICOAGULACIÓN PERIOPERATORIA (NUEVO v12) ═══ -->
 <div class="mode-panel" id="panel-timing">
 <div class="sec-title">🕐 Timing Anticoagulación Perioperatoria</div>
-<div class="sec-sub">Suspensión, reanudación y bridging · PAUSE 2019 + ASRA 2024 + AHA/ACC 2024 + ACCP 2022</div><div style="margin:8px 0 2px;display:flex;flex-wrap:wrap;gap:8px"><a onclick="goLearnTx('T1')" style="cursor:pointer;font-size:11px;background:var(--blue-bg);color:var(--br);border:1px solid var(--bdl);padding:3px 9px;border-radius:999px;text-decoration:none;display:inline-block">📖 Aprender: timing perioperatorio (PAUSE)</a></div>
+<div class="sec-sub">Suspensión, reanudación y bridging · PAUSE 2019 + ASRA 2025 + AHA/ACC 2024 + ACCP 2022</div><div style="margin:8px 0 2px;display:flex;flex-wrap:wrap;gap:8px"><a onclick="goLearnTx('T1')" style="cursor:pointer;font-size:11px;background:var(--blue-bg);color:var(--br);border:1px solid var(--bdl);padding:3px 9px;border-radius:999px;text-decoration:none;display:inline-block">📖 Aprender: timing perioperatorio (PAUSE)</a></div>
 
 <!-- ADVERTENCIA INICIAL -->
 <div class="card" style="border:2px solid #7C3AED;background:#FAF5FF">
@@ -1108,7 +1108,7 @@ function etxSI(){var fc=parseFloat(document.getElementById('etx-fc').value),pas=
       <span class="rp" onclick="s('m4anestesia','profundo',this);u4_update()">Bloqueo profundo (paravertebral, psoas)</span>
       <span class="rp" onclick="s('m4anestesia','superficial',this);u4_update()">Bloqueo superficial (interescalénico, femoral, poplíteo)</span>
     </div>
-    <span class="fh"><strong>ASRA 2024 + ESAIC/ESRA 2022:</strong> Los bloqueos superficiales compresibles tienen menor riesgo de hematoma</span>
+    <span class="fh"><strong>ASRA 2025 + ESAIC/ESRA 2022:</strong> Los bloqueos superficiales compresibles tienen menor riesgo de hematoma</span>
   </div>
 </div>
 
@@ -1497,7 +1497,7 @@ function etxSI(){var fc=parseFloat(document.getElementById('etx-fc').value),pas=
 
 <div class="mode-panel" id="panel-ref"><div id="ref-tx-container"></div></div>
 
-<div class="sfooter">ETHOS·TX v21 · Safety Gate + CHA₂DS₂-VA (ESC 2024) + Caprini (ACCP 2012) + Módulo Docente · Protocolo HHHA v10 · Lumina Health AI · Dr. E. Salvador Moreno · 2026 · <strong style="color:var(--orange)">PROTOTIPO EN VALIDACIÓN</strong></div>
+<div class="sfooter">ETHOS·TX v24 · Safety Gate + CHA₂DS₂-VA (ESC 2024) + Caprini (ACCP 2012) + Módulo Docente · Protocolo HHHA v10 · Lumina Health AI · Dr. E. Salvador Moreno · 2026 · <strong style="color:var(--orange)">PROTOTIPO EN VALIDACIÓN</strong></div>
 
 <script>
 // ═══ PROTECCIÓN ANTI-COPIA ═══
@@ -1653,8 +1653,8 @@ const RF={
   'Stoffel-2017':{ s:'Stoffel NU et al. (Lancet Haematol 2017)', f:'Iron absorption from oral iron supplements given on consecutive versus alternate days and as single morning doses versus twice-daily split dosing in iron-depleted women', d:'10.1016/S2352-3026(17)30182-5', p:'29032957'},
   'Moretti-2015':{ s:'Moretti D et al. (Blood 2015)', f:'Oral iron supplements increase hepcidin and decrease iron absorption from daily or twice-daily doses in iron-depleted young women', d:'10.1182/blood-2015-05-642223', p:'26289639'},
   // PROTOCOLO INSTITUCIONAL HHHA
-  'HHHA-v10':{ s:'HHHA (Res. Exenta N°12648, dic 2024)', f:'Protocolo de solicitud e indicación médica de la transfusión, código PR-BS-0113/GCL1.7, versión 10, vigencia diciembre 2029. Hospital Dr. Hernán Henríquez Aravena, Temuco.', u:'https://www.hhha.cl/'},
-  'SSASUR':{ s:'SSASUR (Servicio Salud Araucanía Sur)', f:'Protocolo de Ahorro de Sangre — Programa PBM regional. Referenciado en Protocolo HHHA PR-BS-0113/GCL1.7 v10 para anemia preoperatoria de cirugía electiva postergable.', u:'https://www.ssasur.cl/'},
+  'HHHA-v10':{ s:'HHHA (Res. Exenta N°12648, dic 2024)', f:'Protocolo de solicitud e indicación médica de la transfusión, código PR-BS-0113/GCL1.7, versión 10, vigencia diciembre 2029. Hospital Dr. Hernán Henríquez Aravena, Temuco.', u:'protocolos/PR-BS-0113-GCL1.7-v10_Transfusion_HHHA.pdf'},
+  'SSASUR':{ s:'SSASUR (Servicio Salud Araucanía Sur)', f:'Protocolo de Ahorro de Sangre — Programa PBM regional. Referenciado en Protocolo HHHA PR-BS-0113/GCL1.7 v10 para anemia preoperatoria de cirugía electiva postergable.', u:'protocolos/Protocolo-Ahorro-de-Sangre_SSASUR.pdf'},
   // Safety Gate refs
   'AHA-ICH-2022':{ s:'Greenberg SM et al. (AHA/ASA 2022)', f:'2022 Guideline for the Management of Patients With Spontaneous Intracerebral Hemorrhage', d:'10.1161/STR.0000000000000407', p:'35579034'},
   'CODE-ICH-2024':{ s:'Sheth KN et al. (Stroke 2024)', f:'Code ICH: A Multidisciplinary Protocol for the Management of Intracerebral Hemorrhage', d:'10.1161/STROKEAHA.123.043033', p:'37924487'},
@@ -1667,7 +1667,16 @@ const RF={
   'AL-ATTAR-2023':{ s:'Al-Attar N et al. (J Cardiothorac Surg 2023)', f:'Patient blood management in cardiac surgery: a systematic review', d:'10.1186/s13019-023-02195-4', p:''},
   'LISMAN-ISTH-2021':{ s:'Lisman T, Porte RJ (JTH/ISTH 2021)', f:'Rebalanced hemostasis in patients with liver disease: evidence and clinical consequences', d:'10.1111/jth.15239', p:'33655612'},
   'LISMAN-ASH-2023':{ s:'Lisman T (ASH Hematology 2023)', f:'Coagulation abnormalities in patients with end-stage liver disease', d:'10.1182/hematology.2023000479', p:'38066402'},
-  'GARCIA-2025':{ s:'García Rodríguez JC et al. (Med Intensiva 2025)', f:'Perioperative management of hemostasis in liver transplantation: clinical practice algorithm', d:'10.1016/j.medin.2025.502216', p:''}
+  'GARCIA-2025':{ s:'García Rodríguez JC et al. (Med Intensiva 2025)', f:'Perioperative management of hemostasis in liver transplantation: clinical practice algorithm', d:'10.1016/j.medin.2025.502216', p:''},
+   // Anticoagulación perioperatoria — sub-tab Fármacos
+   'ASRA-2025':{ s:'Kopp SL et al. (ASRA 5.ª ed. 2025)', f:'Regional anesthesia in the patient receiving antithrombotic or thrombolytic therapy: ASRA Evidence-Based Guidelines (fifth edition). Reg Anesth Pain Med 2025', d:'10.1136/rapm-2024-105766', p:''},
+   'ESC-2022-NCS':{ s:'Halvorsen S et al. (ESC 2022)', f:'2022 ESC Guidelines on cardiovascular assessment and management of patients undergoing non-cardiac surgery. Eur Heart J 2022;43(39):3826-3924', d:'10.1093/eurheartj/ehac270', p:''},
+   'AHA-ACC-2024-PERIOP':{ s:'Thompson A et al. (AHA/ACC 2024)', f:'2024 AHA/ACC Guideline for Perioperative Cardiovascular Management for Noncardiac Surgery. Circulation 2024;150(19):e351-e442', d:'10.1161/CIR.0000000000001285', p:''},
+   'PAUSE-2019':{ s:'Douketis JD et al. (PAUSE 2019)', f:'Perioperative Management of Patients With Atrial Fibrillation Receiving a Direct Oral Anticoagulant. JAMA Intern Med 2019;179(11):1469-1478', d:'10.1001/jamainternmed.2019.2431', p:''},
+   'BRIDGE-2015':{ s:'Douketis JD et al. (BRIDGE 2015)', f:'Perioperative Bridging Anticoagulation in Patients with Atrial Fibrillation. N Engl J Med 2015;373(9):823-833', d:'10.1056/NEJMoa1501035', p:''},
+   'POISE-2-2014':{ s:'Devereaux PJ et al. (POISE-2 2014)', f:'Aspirin in Patients Undergoing Noncardiac Surgery. N Engl J Med 2014;370(16):1494-1503', d:'10.1056/NEJMoa1401105', p:''},
+   'ACCP-2022':{ s:'Douketis JD et al. (ACCP 2022)', f:'Perioperative Management of Antithrombotic Therapy: An American College of Chest Physicians Clinical Practice Guideline. Chest 2022;162(5):e207-e243', d:'10.1016/j.chest.2022.07.025', p:''},
+   'ADAMSKI-2022':{ s:'Adamski P et al. (2022)', f:'Reversal of Platelet Inhibition in Patients Receiving Ticagrelor. Rev Cardiovasc Med 2022;23(9):300', d:'10.31083/j.rcm2309300', p:''}
 };
 function rt(k){if(!RF[k])return '';const u=RF[k].u?RF[k].u:`https://doi.org/${RF[k].d}`;return `<a class="rt" href="${u}" target="_blank" title="${RF[k].f}">${RF[k].s||k}</a>`;}
 
@@ -4025,7 +4034,7 @@ function updateCapriniResult(){
 
 // ═══════════════════════════════════════════════════════════════
 // ═══ MODE 4: TIMING ANTICOAGULACIÓN PERIOPERATORIA (v12)     ═══
-// ═══ Basado en: PAUSE 2019, ASRA 2024, AHA/ACC 2024,         ═══
+// ═══ Basado en: PAUSE 2019, ASRA 2025, AHA/ACC 2024,         ═══
 // ═══             ACCP 2022, ESAIC/ESRA 2022, ESC 2022        ═══
 // ═══════════════════════════════════════════════════════════════
 
@@ -4091,13 +4100,13 @@ function ajustarTiempoDabigatran(dosis, riesgo, anestesia, crcl) {
   if (anestesia === 'neuroaxial' || anestesia === 'profundo') {
     if (dosis === 'alta') {
       if (crcl >= 50) return {horas:72, dias:3, advertencia:''};
-      if (crcl >= 30) return {horas:120, dias:5, advertencia:'CrCl 30-49: requiere 120h (ASRA 2024 Grade IIC)'};
-      return {horas:null, dias:null, advertencia:'⛔ CrCl <30 + dabigatrán dosis alta + neuroaxial = CONTRAINDICADO sin nivel plasmático (ASRA 2024)'};
+      if (crcl >= 30) return {horas:120, dias:5, advertencia:'CrCl 30-49: requiere 120h (ASRA 2025 Grade IIC)'};
+      return {horas:null, dias:null, advertencia:'⛔ CrCl <30 + dabigatrán dosis alta + neuroaxial = CONTRAINDICADO sin nivel plasmático (ASRA 2025)'};
     } else {
-      // Dosis baja (110 mg): depuración ~80% renal, independiente de la dosis → misma escalera por CrCl que la dosis alta.
-      if (crcl >= 50) return {horas:72, dias:3, advertencia:''};
-      if (crcl >= 30) return {horas:120, dias:5, advertencia:'CrCl 30-49: requiere 120h (ASRA 2024)'};
-      return {horas:null, dias:null, advertencia:'⛔ CrCl <30 + dabigatrán + neuroaxial = CONTRAINDICADO sin nivel plasmático'};
+      // Dosis baja: ASRA 5.ª ed. (Kopp 2025) = suspender ≥48 h (no escalona a 120 h en dosis baja; el 120 h es exclusivo de dosis alta). CrCl<30: en contra del bloqueo salvo nivel plasmático <30 ng/mL.
+      if (crcl >= 50) return {horas:48, dias:2, advertencia:''};
+      if (crcl >= 30) return {horas:48, dias:2, advertencia:'CrCl 30-49 (dosis baja): ASRA 48 h; por depuración renal 75-80% valorar nivel plasmático (dTT/ECT) si está disponible.'};
+      return {horas:null, dias:null, advertencia:'⛔ CrCl <30 + dabigatrán + neuroaxial = en contra del bloqueo salvo nivel plasmático <30 ng/mL (ASRA 2025)'};
     }
   } else {
     // Procedimientos NO neuroaxiales
@@ -4133,9 +4142,23 @@ function ajustarTiempoDabigatran(dosis, riesgo, anestesia, crcl) {
 // Ajustes por función renal — Apixaban/Rivaroxaban/Edoxaban
 function ajustarTiempoXa(farmaco, dosis, riesgo, anestesia, crcl) {
   if (anestesia === 'neuroaxial' || anestesia === 'profundo') {
-    // ASRA 5ª ed 2024 (grado 2C): apixabán, rivaroxabán y edoxabán = 72 h antes de bloqueo neuroaxial, SIN distinción de dosis.
-    if (crcl < 30) return {horas:72, dias:3, advertencia:'ASRA 2024: 72 h mínimo; CrCl<30 prolonga la vida media — medir nivel anti-Xa calibrado antes de puncionar.'};
-    return {horas:72, dias:3, advertencia:'ASRA 2024: suspender 72 h (independiente de la dosis); si <72 h, medir nivel anti-Xa calibrado.'};
+    // ASRA 5.ª ed. (Kopp 2025, grado IIC/2C) — el intervalo de neuroeje DISTINGUE dosis baja vs alta. Verificado sobre fuente primaria (rapm-2024-105766, pág 8-9).
+    if (dosis === 'alta') {
+      // Dosis alta: apixabán / rivaroxabán / edoxabán = 72 h.
+      return {horas:72, dias:3, advertencia: (crcl && crcl < 30)
+        ? 'ASRA 2025 (dosis alta, 72 h): CrCl<30 prolonga la t½ — medir nivel anti-Xa calibrado (<30 ng/mL o ≤0,1 UI/mL) antes de puncionar.'
+        : 'ASRA 2025 (dosis alta): suspender 72 h; si <72 h, medir nivel anti-Xa calibrado (<30 ng/mL o ≤0,1 UI/mL).'};
+    }
+    // Dosis baja (profiláctica): el intervalo es fármaco-específico (ASRA 2025).
+    if (farmaco === 'Rivaroxaban') {
+      const h = (crcl && crcl < 30) ? 30 : 24;
+      return {horas:h, dias:+(h/24).toFixed(2), advertencia:'ASRA 2025 (rivaroxabán dosis baja): '+h+' h'+((crcl && crcl < 30)?' (30 h por CrCl<30)':'')+'; si <'+h+' h, medir nivel anti-Xa calibrado.'};
+    }
+    if (farmaco === 'Apixaban') {
+      return {horas:36, dias:1.5, advertencia:'ASRA 2025 (apixabán dosis baja): 36 h; si <36 h, medir nivel anti-Xa calibrado.'};
+    }
+    // Edoxabán: no existe dosis baja con indicación FDA → ASRA solo aborda dosis alta (72 h).
+    return {horas:72, dias:3, advertencia:'Edoxabán carece de dosis baja con indicación FDA; ASRA 2025 aborda solo dosis alta → 72 h. Verificar dosis/indicación real.'};
   } else {
     // No neuroaxial
     if (dosis === 'alta') {
@@ -4572,7 +4595,7 @@ function evalTiming() {
           <div style="background:white;padding:12px;border-radius:6px;border:1px solid #E5E1D8">
             <div style="font-size:10px;color:var(--tc);text-transform:uppercase;letter-spacing:.5px">Nivel objetivo</div>
             <div style="font-size:14px;font-weight:700;color:var(--tp);margin-top:4px">${ac !== 'Warfarina' ? '<30 ng/mL' : 'INR <1.5'}</div>
-            <div style="font-size:11px;color:var(--ts);margin-top:2px">${ac !== 'Warfarina' ? 'Si <72h: medir nivel (ASRA 2024)' : 'Día -1 verificar'}</div>
+            <div style="font-size:11px;color:var(--ts);margin-top:2px">${ac !== 'Warfarina' ? 'Si <72h: medir nivel (ASRA 2025)' : 'Día -1 verificar'}</div>
           </div>
         </div>
         
@@ -4619,7 +4642,7 @@ function evalTiming() {
             <li>Decisión compartida con cirujano (riesgo hemorrágico residual)</li>
           </ul>
           <br>
-          <strong style="color:var(--tp)">📋 Fuentes:</strong> ACCP 2022 Rec 27 (DOACs >24h postop) · ASRA 2024 (intervalo neuroaxial) · EHRA 2021 (24-72h según riesgo)
+          <strong style="color:var(--tp)">📋 Fuentes:</strong> ACCP 2022 Rec 27 (DOACs >24h postop) · ASRA 2025 (intervalo neuroaxial) · EHRA 2021 (24-72h según riesgo)
         </div>
       </div>
     `;
@@ -6901,9 +6924,10 @@ function renderReferenciaTx(){
   var h='<div class="card"><div class="card-title">📖 Referencia</div>';
   h+='<div class="ref-subtabs">';
   h+='<button class="ref-subtab'+(REF_TX_SUB==='temario'?' sel':'')+'" onclick="setRefSubTx(\'temario\')">📚 Temario</button>';
+  h+='<button class="ref-subtab'+(REF_TX_SUB==='farmacos'?' sel':'')+'" onclick="setRefSubTx(\'farmacos\')">💊 Fármacos</button>';
   h+='<button class="ref-subtab'+(REF_TX_SUB==='siglas'?' sel':'')+'" onclick="setRefSubTx(\'siglas\')">🔤 Siglas</button>';
   h+='</div>';
-  h+='<div id="ref-tx-body">'+(REF_TX_SUB==='siglas'?glosarioTxHTML():temarioTxHTML())+'</div>';
+  h+='<div id="ref-tx-body">'+(REF_TX_SUB==='siglas'?glosarioTxHTML():(REF_TX_SUB==='farmacos'?farmacosTxHTML():temarioTxHTML()))+'</div>';
   h+='</div>';
   c.innerHTML=h;
 }
@@ -6933,6 +6957,84 @@ function glosarioTxHTML(){
   });
   return h;
 }
+function farmacosTxHTML(){
+  var H='';
+  // Encabezado + disclaimer + acceso al calculador
+  H+='<p class="ref-hint">Tabla de referencia perioperatoria de anticoagulantes y antiplaquetarios. Cifras verificadas sobre fuente primaria (ASRA 5.ª ed., ESC 2022, AHA/ACC 2024, PAUSE). <b>No reemplaza</b> el juicio clínico ni la ficha técnica vigente de cada producto.</p>';
+  H+='<div style="background:#F3E8FF;border:1px solid #C4B5FD;border-radius:9px;padding:10px 12px;margin-bottom:14px;font-size:.84rem;line-height:1.5">🕐 Para el cálculo individualizado por fármaco, dosis y función renal, usa la <b><a onclick="setMode(\'timing\')" style="color:#7C3AED;cursor:pointer;text-decoration:underline">Calculadora de Timing</a></b>. Esta tabla es la vista de consulta global.</div>';
+
+  var thS='style="text-align:left;padding:7px 8px;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ts);border-bottom:2px solid var(--bdl);white-space:nowrap"';
+  var tdS='style="padding:7px 8px;font-size:.8rem;line-height:1.4;border-bottom:1px solid var(--bdl);vertical-align:top"';
+  var nameS='style="font-weight:700;color:var(--br)"';
+  var subS='style="font-size:.68rem;color:var(--tt);display:block;margin-top:2px"';
+  function wrap(inner){return '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:6px"><table style="width:100%;border-collapse:collapse;min-width:560px">'+inner+'</table></div>';}
+
+  // ===== TABLA A — ANTICOAGULANTES =====
+  H+='<div class="ref-secn">💊 Anticoagulantes — suspensión, reinicio y reversión</div>';
+  var a='<tr><th '+thS+'>Fármaco</th><th '+thS+'>Suspensión preop</th><th '+thS+'>Reinicio</th><th '+thS+'>Antídoto / reversión</th><th '+thS+'>Fuente</th></tr>';
+  function rowA(n,sub,susp,rei,anti,refs){return '<tr><td '+tdS+'><span '+nameS+'>'+n+'</span><span '+subS+'>'+sub+'</span></td><td '+tdS+'>'+susp+'</td><td '+tdS+'>'+rei+'</td><td '+tdS+'>'+anti+'</td><td '+tdS+'>'+refs+'</td></tr>';}
+  a+=rowA('Warfarina','AVK · t½ 36–42 h','5 días antes; guiar por <b>INR</b> (&lt;1,5 cirugía mayor; &lt;1,2 si neuroeje)','12–24 h postop si hemostasia','Vit K 5–10 mg IV <b>+ CCP-4F</b>; PFC solo si no hay CCP', rt('ASRA-2025'));
+  a+=rowA('Acenocoumarol','AVK · t½ 8–11 h','~3 días antes; INR-guiado <span style="color:var(--orange)">◐ SmPC</span>','Igual warfarina','Igual warfarina','—');
+  a+=rowA('Rivaroxabán','anti-Xa · t½ 5–9 h','<b>eGFR ≥30:</b> 1 d / 2 d · <b>15–29:</b> ≥36 h / ≥48 h · <b>&lt;15:</b> no indicado','24 h / 48–72 h, tras hemostasia','Andexanet alfa ó CCP-4F ~50 U/kg', rt('PAUSE-2019')+' '+rt('ESC-2022-NCS'));
+  a+=rowA('Apixabán','anti-Xa · t½ ~12 h','<b>eGFR ≥30</b> (PAUSE ≥25)<b>:</b> 1 d / 2 d · <b>15–29:</b> ≥36 h / ≥48 h · <b>&lt;15:</b> no indicado','24 h / 48–72 h','Andexanet / CCP-4F', rt('PAUSE-2019')+' '+rt('ESC-2022-NCS'));
+  a+=rowA('Edoxabán','anti-Xa · t½ 10–14 h','<b>eGFR ≥30:</b> 1 d / 2 d · <b>15–29:</b> ≥36 h / ≥48 h · <b>&lt;15:</b> no indicado','Igual','Andexanet (datos limitados) / CCP-4F', rt('ESC-2022-NCS'));
+  a+=rowA('Dabigatrán','anti-<b>IIa</b> · t½ 12–17 h · renal ~80%','<b>eGFR ≥50:</b> 1 d / 2 d · <b>30–49:</b> ≥48 h / ≥96 h · <b>15–29:</b> no indicado','24 h / 48–72 h','<b>Idarucizumab</b> 5 g IV (específico). Rebote tardío ~24 h', rt('PAUSE-2019')+' '+rt('ESC-2022-NCS'));
+  a+=rowA('HNF IV','t½ 60–90 min','4–6 h antes; TTPA/anti-Xa','12–24 h postop','Protamina 1 mg / 100 U (~2–3 h)','—');
+  a+=rowA('HBPM','anti-Xa · t½ 3–7 h (↑ renal)','<b>Alta:</b> 24 h · <b>Baja:</b> 12 h antes','Profilaxis 12 h / terapéutica 24 h','Protamina revierte ~60% (parcial)', rt('ASRA-2025'));
+  a+=rowA('Fondaparinux','anti-Xa puro · t½ 17–21 h','3–4 días antes (más si ClCr bajo)','Según hemostasia','<b>Sin antídoto</b>; protamina no sirve','—');
+  a+=rowA('Argatrobán IV','anti-IIa · t½ ~45 min · <b>hepático</b>','2–4 h antes; prolongar si insuf. hepática','Según hemostasia','Ninguno; soporte (t½ corta)','—');
+  a+=rowA('Bivalirudina IV','anti-IIa · t½ ~25 min','2–4 h antes (más si renal)','Según hemostasia','Ninguno; hemodiálisis parcial','—');
+  H+=wrap(a);
+
+  // ===== TABLA B — ANTIPLAQUETARIOS =====
+  H+='<div class="ref-secn">🩹 Antiplaquetarios — suspensión, reinicio y reversión</div>';
+  var b='<tr><th '+thS+'>Fármaco</th><th '+thS+'>Suspensión preop</th><th '+thS+'>Reinicio</th><th '+thS+'>Reversión</th><th '+thS+'>Fuente</th></tr>';
+  b+=rowA('Aspirina','COX-1 irrev. · efecto ~7–10 d','A menudo <b>NO se suspende</b> (continuar peri-op, Clase I-B). Si se suspende: 5–7 d. Alto riesgo hemorrágico: ≥7 d','24 h; reanudar ≤48 h','Plaquetas ± DDAVP si sangrado. Restauración función 4 d', rt('ESC-2022-NCS')+' '+rt('POISE-2-2014'));
+  b+=rowA('Clopidogrel','P2Y12 irrev. · prodroga','5–7 días antes','24 h (± carga según cardiología)','Plaquetas <b>efectivas</b> + DDAVP', rt('PAUSE-2019')+' '+rt('ACCP-2022'));
+  b+=rowA('Prasugrel','P2Y12 irrev. · más potente','7–10 días antes','24 h','Plaquetas efectivas', rt('AHA-ACC-2024-PERIOP'));
+  b+=rowA('Ticagrelor','P2Y12 <b>reversible</b> · metabolito activo','3–5 días antes','24 h','⚠ Plaquetas <b>poco/inefectivas</b>; antídoto: <b>bentracimab</b>', rt('AHA-ACC-2024-PERIOP')+' '+rt('ADAMSKI-2022'));
+  b+=rowA('Cangrelor IV','P2Y12 reversible · t½ 3–6 min','1–6 h antes (recup. ~60 min)','—','Suspender infusión (puente IV)','—');
+  b+=rowA('Tirofibán / Eptifibatida IV','GP IIb/IIIa · t½ ~2 h','4–8 h antes','—','Suspender; plaquetas si sangrado', rt('ASRA-2025'));
+  b+=rowA('Abciximab IV','GP IIb/IIIa · unión prolongada','24–48 h antes <span style="color:var(--orange)">◐</span>','—','Plaquetas efectivas. <b>Retirado en varios mercados</b>', rt('ASRA-2025'));
+  b+=rowA('Vorapaxar','PAR-1 · t½ muy larga','Sin washout práctico (&gt;3–4 sem) <span style="color:var(--orange)">◐</span>','—','Plaquetas de utilidad limitada','—');
+  H+=wrap(b);
+
+  // ===== SECCIÓN D — NEUROEJE =====
+  H+='<div class="ref-secn">💉 Intervalos de neuroeje (ASRA 5.ª ed.) — bloqueo neuraxial / plexo profundo</div>';
+  H+='<p class="ref-hint" style="margin-top:0">Decisión <b>más conservadora</b> que la suspensión quirúrgica general. Terminología dosis baja/alta. Todos los DOAC: grado 2C. Nivel residual aceptable: anti-Xa &lt;30 ng/mL o ≤0,1 UI/mL.</p>';
+  var d='<tr><th '+thS+'>Fármaco</th><th '+thS+'>Dosis baja</th><th '+thS+'>Dosis alta</th><th '+thS+'>Catéter → 1.ª dosis</th></tr>';
+  function rowD(n,baja,alta,cat){return '<tr><td '+tdS+'><span '+nameS+'>'+n+'</span></td><td '+tdS+'>'+baja+'</td><td '+tdS+'>'+alta+'</td><td '+tdS+'>'+cat+'</td></tr>';}
+  d+=rowD('Rivaroxabán','24 h (30 h si CrCl&lt;30)','72 h','baja 6 h / alta 24 h');
+  d+=rowD('Apixabán','36 h','72 h','baja 6 h / alta 24 h');
+  d+=rowD('Edoxabán','— (sin dosis baja FDA)','72 h','24 h');
+  d+=rowD('Dabigatrán','48 h','72 h (CrCl≥50) · 120 h (30–49) · <b>en contra &lt;30</b> salvo nivel','baja 6 h / alta 24 h');
+  d+=rowD('HBPM','12 h','24 h','≥4 h tras retiro; 1.ª dosis ≥24 h tras colocación');
+  d+=rowD('Fondaparinux','36–42 h (2,5 mg)','70–105 h (5–10 mg)','≥6 h');
+  H+=wrap(d);
+  H+='<div style="font-size:.8rem;line-height:1.6;background:var(--sf);border-radius:8px;padding:10px 12px;margin-bottom:6px"><b>Antiplaquetarios (neuroeje):</b> Clopidogrel <b>5–7 d</b> · Prasugrel <b>7–10 d</b> · Ticagrelor <b>5 d</b> · Cangrelor evitar <b>3 h</b> · Cilostazol evitar <b>2 d</b> · AAS/AINE <b>sin restricción</b>. '+rt('ASRA-2025')+'</div>';
+  H+='<div style="font-size:.78rem;line-height:1.5;border-left:3px solid var(--orange);background:var(--orange-bg);padding:8px 12px;margin-bottom:14px"><b>Antídotos para habilitar el bloqueo:</b> ASRA recomienda <b>EN CONTRA</b> de usar idarucizumab/andexanet/CCP con el solo fin de permitir un neuroeje. Preferir suspensión y recuperación espontánea. '+rt('ASRA-2025')+'</div>';
+
+  // ===== SECCIÓN C — COMBINACIONES (DES) =====
+  H+='<div class="ref-secn">🫀 DAPT + stent coronario — ventana de cirugía electiva</div>';
+  var c='<tr><th '+thS+'>Escenario</th><th '+thS+'>ESC 2022</th><th '+thS+'>AHA/ACC 2024</th></tr>';
+  function rowC(e,esc,aha){return '<tr><td '+tdS+'><span '+nameS+'>'+e+'</span></td><td '+tdS+'>'+esc+'</td><td '+tdS+'>'+aha+'</td></tr>';}
+  c+=rowC('DES electiva / coronariopatía crónica','≥6 meses (I-A)','≥6 meses (COR 2a, B-NR)');
+  c+=rowC('DES post-SCA','12 meses (I-A)','≥12 meses (COR 1, B-NR)');
+  c+=rowC('DES time-sensitive','≥3 meses (IIa-C)','≥3 meses (COR 2b, B-NR)');
+  c+=rowC('DES/BMS &lt;30 días','mín. 1 mes DAPT (I-B)','<b>potencialmente dañino</b> (COR 3: Harm)');
+  c+=rowC('Balón sin stent','—','≥14 días (COR 1, C-LD)');
+  H+=wrap(c);
+  H+='<div style="font-size:.8rem;line-height:1.6;background:var(--sf);border-radius:8px;padding:10px 12px;margin-bottom:14px">▸ <b>Continuar aspirina</b> peri-op; suspender el P2Y12 por su fila. '+rt('ESC-2022-NCS')+'<br>▸ Los <b>DOAC no se puentean</b> — se interrumpen y reanudan sin heparina. '+rt('PAUSE-2019')+' '+rt('ACCP-2022')+'<br>▸ <b>Warfarina + puente</b> solo en alto riesgo tromboembólico (válvula mecánica, ictus &lt;3 m). '+rt('BRIDGE-2015')+'</div>';
+
+  // Fuentes
+  H+='<div class="ref-secn">📚 Fuentes</div>';
+  H+='<div style="font-size:.8rem;line-height:1.8">'+
+     rt('ASRA-2025')+' · '+rt('ESC-2022-NCS')+' · '+rt('AHA-ACC-2024-PERIOP')+' · '+rt('PAUSE-2019')+' · '+rt('ACCP-2022')+' · '+rt('BRIDGE-2015')+' · '+rt('POISE-2-2014')+' · '+rt('ADAMSKI-2022')+
+     '</div>';
+  H+='<p class="ref-hint" style="margin-top:8px">Cifras de neuroeje, ventana DES y DOAC por función renal verificadas sobre el documento original. Trazabilidad celda a celda en el documento técnico <i>ETHOS·TX — Coagulopatía y Reversión</i>.</p>';
+  return H;
+}
+
 function temarioTxHTML(){
   var h='<input type="text" id="ref-tx-q" class="ref-search" placeholder="🔎 Buscar tema…" oninput="filtrarRefTx()">';
   h+='<p class="ref-hint">Cada tema de la app con el paper que lo respalda. Bibliografía verificada.</p>';
