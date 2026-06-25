@@ -6931,7 +6931,20 @@ function renderReferenciaTx(){
   h+='</div>';
   c.innerHTML=h;
 }
-function setRefSubTx(s){REF_TX_SUB=s;renderReferenciaTx();window.scrollTo(0,0);}
+function setRefSubTx(s){
+  REF_TX_SUB=s;renderReferenciaTx();
+  // Antes hacía window.scrollTo(0,0) → en el celular saltaba al tope de la página
+  // (formulario del paciente) y parecía que el primer toque "no hacía nada", obligando
+  // a un segundo toque. Ahora deja la barra de sub-pestañas visible justo debajo de las
+  // barras pegadas (header + selector de modo), mostrando de inmediato el contenido elegido.
+  var st=document.querySelector('.ref-subtabs');
+  if(st){
+    var hd=document.querySelector('header'),ms=document.querySelector('.mode-sel');
+    var off=(hd?hd.getBoundingClientRect().height:56)+(ms?ms.getBoundingClientRect().height:0)+12;
+    var y=st.getBoundingClientRect().top+window.pageYOffset-off;
+    window.scrollTo({top:Math.max(0,y),behavior:'auto'});
+  }
+}
 function filtrarRefTx(){
   var qel=document.getElementById('ref-tx-q'),q=(qel?qel.value:'').toLowerCase().trim();
   document.querySelectorAll('#ref-tx-body .ref-group').forEach(function(g){
