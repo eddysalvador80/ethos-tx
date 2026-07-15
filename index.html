@@ -226,6 +226,21 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 .ref-item b{color:var(--br)}
 .ref-item .refs{font-size:.74rem;color:var(--tt);margin-top:3px}
 .ref-item .refs a.rt{color:var(--br);text-decoration:none;border-bottom:1px dotted var(--br)}
+
+/* sys-legend — portado de rama docente (leyenda de estados) */
+.sys-legend{margin:8px 14px 0;border:1px solid var(--bd);border-radius:8px;background:var(--sfa);font-size:12px;overflow:hidden}
+.sys-legend>summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 12px;-webkit-user-select:none;user-select:none}
+.sys-legend>summary::-webkit-details-marker{display:none}
+.sys-legend .sl-t{font-weight:700;color:var(--ts);letter-spacing:.4px;text-transform:uppercase;font-size:10px}
+.sys-legend .sl-chip{display:inline-flex;align-items:center;font-weight:600;font-size:11px;padding:2px 9px;border-radius:999px}
+.sys-legend .sl-g{color:var(--br);background:var(--brs);border:1px solid var(--brb)}
+.sys-legend .sl-r{color:var(--red);background:var(--red-bg);border:1px solid var(--red-bd)}
+.sys-legend .sl-b{color:var(--blue);background:var(--blue-bg);border:1px solid var(--blue-bd)}
+.sys-legend .sl-hint{margin-left:auto;color:var(--tc);font-size:11px}
+.sys-legend[open] .sl-hint{visibility:hidden}
+.sys-legend .sl-body{padding:4px 14px 12px;display:grid;gap:7px;border-top:1px solid var(--bdl)}
+.sys-legend .sl-body>div{font-size:12px;line-height:1.5;color:var(--ts)}
+.sys-legend .sl-prin{margin-top:2px;padding:8px 11px;background:var(--bgw);border-radius:6px;font-weight:600;color:var(--tp)}
 </style>
 </head>
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false" oncopy="return false" oncut="return false" onpaste="return false">
@@ -250,6 +265,15 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 </div>
 
 <div class="disc">⚠ <strong>PROTOTIPO EN VALIDACIÓN — Herramienta de apoyo clínico.</strong> No reemplaza el juicio del médico ni el Protocolo institucional vigente. Alineada con Protocolo HHHA PR-BS-0113/GCL1.7 v10 (dic 2024) + evidencia internacional (PAUSE 2019, ASRA 2025, ACCP 2022, AHA/ACC 2024, ESAIC/ESRA 2022, ESC 2022, BRIDGE 2015). Validación institucional formal pendiente.</div>
+<details class="sys-legend">
+<summary><span class="sl-t">Estados del sistema</span><span class="sl-chip sl-g">● Determinístico</span><span class="sl-chip sl-r">● Límite · deriva</span><span class="sl-chip sl-b">● IA · docente</span><span class="sl-hint">qué significa cada color ▾</span></summary>
+<div class="sl-body">
+<div><strong style="color:var(--br)">● Determinístico — información de protocolo / evidencia.</strong> El núcleo calcula la recomendación con reglas fijas ancladas a fuente verificable. Reproducible y auditable; no interviene ningún modelo de lenguaje.</div>
+<div><strong style="color:var(--red)">● Límite del sistema — deriva.</strong> Ante un escenario excluyente (Safety Gate), ETHOS·TX se detiene y remite al protocolo institucional. No emite recomendación.</div>
+<div><strong style="color:var(--blue)">● IA generativa — tutor docente.</strong> Explica evidencia con fines formativos. Es la única capa generativa del sistema; no decide sobre pacientes concretos.</div>
+<div class="sl-prin">La decisión clínica nunca la toma la IA. El núcleo que decide es determinístico; la IA solo explica. La decisión y la firma son del médico.</div>
+</div>
+</details>
 <div class="hem-ban" id="hem-ban">🚨 PRIORIDAD: CONTROL HEMOSTÁTICO + MTP. La Hb es secundaria.</div>
 
 <div class="app">
