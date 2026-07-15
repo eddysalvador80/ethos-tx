@@ -6730,11 +6730,15 @@ function tutorRender(text){
   html=html.replace(/(<li>[\s\S]*?<\/li>)/g,'<ul style="margin:6px 0 8px 18px">$1</ul>');
   html=html.split(/\n{2,}/).map(function(p){return p.match(/<ul/)?p:'<p style="margin-bottom:8px">'+p.replace(/\n/g,'<br>')+'</p>';}).join('');
   if(usados.length){
-    var src='<div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--bdl)"><div style="font-family:var(--mono);font-size:10px;color:var(--tc);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Fuentes citadas</div>';
+    var src='<div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--bdl)"><div style="font-family:var(--mono);font-size:10px;color:var(--tc);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Evidencia citada — síntesis curada del corpus; verifica en la fuente vía DOI</div>';
     usados.forEach(function(id){
       var r=null;for(var i=0;i<TUTOR_KB.length;i++){if(TUTOR_KB[i].id===id){r=TUTOR_KB[i];break;}}
       var url=r.doi?('https://doi.org/'+r.doi):(r.url||'#');
-      src+='<div style="font-size:11px;color:var(--ts);margin-bottom:4px;line-height:1.4">'+tutorEsc(r.cita)+'. <em>'+tutorEsc(r.titulo)+'</em>. <a href="'+url+'" target="_blank" style="color:var(--br);text-decoration:none;font-family:var(--mono)">'+(r.doi?'DOI: '+r.doi:'enlace')+'</a></div>';
+      src+='<div style="margin-bottom:8px;border:1px solid var(--bdl);border-radius:7px;overflow:hidden">'+
+        '<div style="padding:6px 10px;background:var(--brs)"><span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--br)">'+tutorEsc(r.cita)+'</span> &middot; <span style="font-size:11px;color:var(--ts)"><em>'+tutorEsc(r.titulo)+'</em></span></div>'+
+        (r.tema?'<div style="padding:8px 10px;font-size:11.5px;line-height:1.55;color:var(--ts);border-top:1px solid var(--bdl)"><span style="font-family:var(--mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--tc);display:block;margin-bottom:4px">Fragmento de evidencia</span>'+tutorEsc(r.tema)+'</div>':'')+
+        '<div style="padding:5px 10px;background:var(--sfa);border-top:1px solid var(--bdl)"><a href="'+url+'" target="_blank" style="color:var(--br);text-decoration:none;font-family:var(--mono);font-size:10px">'+(r.doi?'↗ Verificar en la fuente · DOI '+r.doi:'↗ Verificar en la fuente')+'</a></div>'+
+      '</div>';
     });
     src+='</div>';
     html+=src;
@@ -6742,14 +6746,27 @@ function tutorRender(text){
   return html;
 }
 
-function tutorAddMsg(role,contentHtml){
+function tutorAddMsg(role,contentHtml,kind){
   var zone=document.getElementById('tutor-msgs');
   var w=document.createElement('div');
   w.style.cssText='display:flex;gap:10px';
-  var av=role==='user'?
-    '<div style="width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;background:var(--bgw);color:var(--tt)">TÚ</div>':
-    '<div style="width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;background:var(--br);color:#fff">TX</div>';
-  w.innerHTML=av+'<div style="flex:1;font-size:14px;line-height:1.65">'+contentHtml+'</div>';
+  var av;
+  if(role==='user'){
+    av='<div style="width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;background:var(--bgw);color:var(--tt)">TÚ</div>';
+  }else if(kind==='ia'){
+    av='<div style="width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;background:var(--blue);color:#fff" title="Respuesta generada por IA — capa docente, no decide">IA</div>';
+  }else{
+    av='<div style="width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;background:var(--br);color:#fff">TX</div>';
+  }
+  var body;
+  if(kind==='ia'){
+    body='<div style="flex:1;font-size:14px;line-height:1.65;border-left:3px solid var(--blue);background:var(--blue-bg);border-radius:0 8px 8px 0;padding:8px 12px">'+
+      '<div style="font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);font-weight:700;margin-bottom:6px">IA generativa · docente — explica, no decide</div>'+
+      contentHtml+'</div>';
+  }else{
+    body='<div style="flex:1;font-size:14px;line-height:1.65">'+contentHtml+'</div>';
+  }
+  w.innerHTML=av+body;
   zone.appendChild(w);
   zone.scrollTop=zone.scrollHeight;
   return w;
@@ -6810,7 +6827,7 @@ function tutorSend(){
     }
     if(!text)text='No pude generar una respuesta. Intenta reformular la pregunta.';
     TUTOR_HISTORY.push({role:'assistant',content:text});
-    tutorAddMsg('bot',tutorRender(text));
+    tutorAddMsg('bot',tutorRender(text),'ia');
   }).catch(function(err){
     tutorThinking(false);
     tutorAddMsg('bot','<p>Hubo un problema de conexión: '+tutorEsc(String(err.message||err))+'</p>');
