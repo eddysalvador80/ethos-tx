@@ -1119,7 +1119,33 @@ function etxSI(){var fc=parseFloat(document.getElementById('etx-fc').value),pas=
   <div style="font-size:12px;color:var(--tt)">CrCl calculado (Cockcroft-Gault):</div>
   <div id="m4crcl-value" style="font-size:20px;font-weight:700;font-family:var(--mono);color:#7C3AED"></div>
   <div id="m4crcl-cat" style="font-size:11px;color:var(--ts);margin-top:3px"></div>
+  <div id="m4crcl-advisory" style="font-size:11px;line-height:1.5;margin-top:6px;padding:6px 8px;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:4px;color:#92400e;display:none"></div>
 </div>
+<div style="margin-top:10px">
+  <label class="fl">¿Diálisis o ERC terminal (TFG &lt;15 mL/min)?</label>
+  <div class="rpg">
+    <span class="rp" onclick="s('m4dialisis','no',this)">No</span>
+    <span class="rp" onclick="s('m4dialisis','si',this)">Sí — diálisis / ERC terminal</span>
+  </div>
+  <span class="fh">En diálisis, Cockcroft-Gault no es válido: los DOAC se derivan a nefro/hematología</span>
+</div>
+<div class="fg fg2" style="margin-top:10px">
+  <div>
+    <label class="fl">¿Inhibidor potente P-gp/CYP3A4? <span class="fh" style="font-weight:normal">(azoles, ritonavir, dronedarona…)</span></label>
+    <div class="rpg">
+      <span class="rp" onclick="s('m4inhibidor','no',this);h05_update()">No</span>
+      <span class="rp" onclick="s('m4inhibidor','si',this);h05_update()">Sí</span>
+    </div>
+  </div>
+  <div>
+    <label class="fl">¿Antiagregante concomitante? <span class="fh" style="font-weight:normal">(AAS, clopidogrel, ticagrelor…)</span></label>
+    <div class="rpg">
+      <span class="rp" onclick="s('m4antiagreg','no',this);h05_update()">No</span>
+      <span class="rp" onclick="s('m4antiagreg','si',this);h05_update()">Sí</span>
+    </div>
+  </div>
+</div>
+<div id="m4h05-advisory" style="margin-top:8px;display:none"></div>
 </div>
 
 <!-- SUBSECCIÓN B: PROCEDIMIENTO -->
@@ -1581,7 +1607,7 @@ const VR={
   ferrit: [1,30000, 2,20000,'ng/mL',   'Ferritina fuera de rango (1–30 000 ng/mL).'],
   tsat:   [1,   100, 2,   95,  '%',     'TSAT fuera de rango (1–100%).'],
   hbobj:  [5,   20,  6,   18,  'g/dL',  'Hb objetivo fuera de rango clínico (5–20 g/dL).'],
-  creat:  [0.2, 25,  0.4, 12,  'mg/dL', 'Creatinina fuera de rango (0.2–25 mg/dL). ¿Error de decimales? Ej: 1.0 en vez de 10.'],
+  creat:  [0.2, 25,  0.4, 6,   'mg/dL', 'Creatinina fuera de rango (0.2–25 mg/dL). ¿Error de decimales? Ej: 1.0 en vez de 10.'],
   edad:   [0,   120, 18,  100, 'años',  'Edad fuera de rango (0–120 años). Verifique el dato.'],
 };
 
@@ -4257,6 +4283,16 @@ function u4_update() {
     else if (crcl >= 30) { cat = 'Moderadamente disminuida ⚠️'; color = 'var(--orange)'; }
     else { cat = 'Severamente disminuida ⛔'; color = 'var(--red)'; }
     document.getElementById('m4crcl-cat').innerHTML = `<strong style="color:${color}">Función renal: ${cat}</strong>`;
+    // H-04 (B): CG con peso total sesga en extremos de peso → aviso docente (no cambia el número)
+    const adv = document.getElementById('m4crcl-advisory');
+    if (adv) {
+      if (peso !== null && (peso > 100 || peso < 50)) {
+        adv.style.display = 'block';
+        adv.innerHTML = `⚠ <strong>Peso ${peso} kg:</strong> Cockcroft-Gault con peso total puede <strong>sobreestimar</strong> el CrCl en obesidad y en baja masa muscular/caquexia → <strong>acorta</strong> el intervalo calculado y deja efecto residual. Trata el intervalo como un posible <em>mínimo</em>; usa criterio clínico y considera medir nivel del fármaco. <a href="https://pubmed.ncbi.nlm.nih.gov/21923452/" target="_blank" rel="noopener" style="color:#92400e;text-decoration:underline">Winter 2012</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/3361044/" target="_blank" rel="noopener" style="color:#92400e;text-decoration:underline">Drusano 1988</a>`;
+      } else {
+        adv.style.display = 'none';
+      }
+    }
   } else {
     display.style.display = 'none';
   }
@@ -4280,6 +4316,28 @@ function u4_acChange() {
     S.m4dosis = null;
   }
   u4_update();
+}
+
+// H-05: avisos docentes de interacción PK y de antiagregante (NO recalcula ni bloquea; EHRA 2021 + FDA boxed warning)
+function h05_update() {
+  const box = document.getElementById('m4h05-advisory');
+  if (!box) return;
+  const ac = document.getElementById('m4ac').value;
+  const esDOAC = ac && ac !== 'Warfarina';
+  const A = 'padding:6px 8px;margin-top:6px;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:4px;color:#92400e;font-size:11px;line-height:1.5';
+  let html = '';
+  if (S.m4inhibidor === 'si' && esDOAC) {
+    let ej = 'azoles (ketoconazol, itraconazol), ritonavir, dronedarona, verapamilo, amiodarona';
+    if (ac === 'Dabigatran') ej = 'ketoconazol, dronedarona (contraindicada en la UE), verapamilo, amiodarona (interacción P-gp)';
+    else if (ac === 'Apixaban' || ac === 'Rivaroxaban') ej = 'inhibidores duales potentes P-gp+CYP3A4: ketoconazol, itraconazol, voriconazol, posaconazol, ritonavir, cobicistat';
+    else if (ac === 'Edoxaban') ej = 'ketoconazol, eritromicina, verapamilo, amiodarona, dronedarona, ciclosporina (interacción P-gp)';
+    html += `<div style="${A}">⚠ <strong>Interacción farmacocinética:</strong> un inhibidor potente eleva la exposición al ${ac} y prolonga su efecto → el intervalo calculado puede quedar <strong>corto</strong>. Las guías no dan un intervalo ajustado por interacción: considera un hold más largo, medir nivel del fármaco (centro experto) o individualizar. Ejemplos: ${ej}. <a href="https://academic.oup.com/europace/article/23/10/1612/6247378" target="_blank" rel="noopener" style="color:#92400e;text-decoration:underline">EHRA 2021</a></div>`;
+  }
+  if (S.m4antiagreg === 'si') {
+    html += `<div style="${A}">⚠ <strong>Antiagregante concomitante:</strong> riesgo <strong>aditivo</strong> de sangrado; en especial, mayor riesgo de <strong>hematoma espinal</strong> si se usa técnica neuroaxial. La FDA reconoce que el <em>timing</em> óptimo frente a procedimientos neuroaxiales no se conoce. Para los intervalos de suspensión del antiagregante y la conducta con stent/SCA reciente, ver la lección <a href="#" onclick="goLearnTx('A1');return false" style="color:#92400e;text-decoration:underline;font-weight:600">A1 «Antiagregantes perioperatorios»</a>. ETHOS·TX no decide la suspensión del antiagregante. <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/202155s039s040lbl.pdf" target="_blank" rel="noopener" style="color:#92400e;text-decoration:underline">FDA Eliquis (boxed warning)</a></div>`;
+  }
+  box.innerHTML = html;
+  box.style.display = html ? 'block' : 'none';
 }
 
 // Bridging — criterio propio basado en ACC/AHA 2023 FA (PMID 38043043) + BRIDGE 2015; cortes >=7/>=5 NO verbatim de la guia
@@ -4530,6 +4588,12 @@ function evalTiming() {
     return;
   }
 
+  // H-04 (C): diálisis / ERC terminal → Cockcroft-Gault inválido; FDA no da recomendaciones de dosis (solo DOAC)
+  if (S.m4dialisis === 'si' && ac !== 'Warfarina') {
+    showErr('out-timing', `⛔ <strong>Diálisis / ERC terminal — timing de DOAC no calculable.</strong><br><small style="font-weight:normal">En diálisis o CrCl &lt;15 mL/min, Cockcroft-Gault no es válido y el prospecto de dabigatrán declara que <strong>no se pueden dar recomendaciones de dosis</strong>; los ensayos de <em>timing</em> (PAUSE) excluyeron a estos pacientes. Manejo individualizado con <strong>nefrología/hematología</strong> (medición de nivel de fármaco). <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/022512s047lbl.pdf" target="_blank" rel="noopener" style="color:var(--br);text-decoration:underline">FDA Pradaxa 2024</a></small>`);
+    return;
+  }
+
   // VALIDACIÓN — campos para CrCl en DOACs
   const crcl = calcularCrCl(edad, peso, sexo, creat);
   // H-02: guardas de rango — bloquear valores imposibles que corromperían el CrCl (anti-typo)
@@ -4539,6 +4603,11 @@ function evalTiming() {
   }
   if (edad !== null && (edad < 0 || edad > 120)) {
     showErr('out-timing', `⚠ <strong>Edad fuera de rango (0–120 años): ${edad}.</strong><br><small style="font-weight:normal">Verifique el dato.</small>`);
+    return;
+  }
+  // H-04 (C): CrCl estimado <15 mL/min → fuera de etiqueta FDA para DOAC (backstop del bloqueo de diálisis)
+  if (ac !== 'Warfarina' && crcl !== null && !isNaN(crcl) && crcl < 15) {
+    showErr('out-timing', `⛔ <strong>CrCl estimado &lt;15 mL/min (${crcl}) — timing de DOAC no validado.</strong><br><small style="font-weight:normal">El prospecto FDA no da recomendaciones de dosis con CrCl &lt;15. Verifica la función renal, descarta diálisis/ERC terminal y deriva a nefrología/hematología. <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/022512s047lbl.pdf" target="_blank" rel="noopener" style="color:var(--br);text-decoration:underline">FDA Pradaxa 2024</a></small>`);
     return;
   }
   if (ac !== 'Warfarina' && (crcl === null || isNaN(crcl))) {
