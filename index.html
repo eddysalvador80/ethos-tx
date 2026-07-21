@@ -6898,6 +6898,45 @@ function tutorThinking(on){
   }else{var t=document.getElementById('tutor-thinking');if(t)t.remove();}
 }
 
+// ── Compuerta determinista del tutor (portada de la rama docente, 2026-07-20) ──
+// Intercepta solicitudes de conducta sobre un paciente real ANTES de llamar al modelo.
+var TUTOR_GATE_A=[
+  /\btengo (un |una |a |al |el )?paciente/,
+  /\btengo (un |una )?enfermo/,
+  /\bmi paciente\b/,
+  /\bmi enfermo\b/,
+  /\bme (llego|llega) (un |una )?paciente/,
+  /\bestoy con (un |una )?paciente/,
+  /\b(el|un) paciente que tengo\b/,
+  /\bpaciente (mio|mia)\b/,
+  /\ba mi paciente\b/
+];
+var TUTOR_GATE_B=[
+  /\b(le|lo|la) transfundo\b/,
+  /\btransfundo *\?/,
+  /\bdebo (transfundir|indicar|dar|administrar|poner|iniciar|suspender|revertir)\b/,
+  /\bque (le|lo|la) (doy|indico|administro|pongo|transfundo|inicio)\b/,
+  /\bque (doy|indico|administro|pongo|hago con)\b/,
+  /\bcuanto(s|as)? (le )?(doy|indico|administro|transfundo|pongo)\b/,
+  /\b(le|lo|la) (indico|administro|pongo|doy|inicio|suspendo|revierto)\b/,
+  /\bprocedo con\b/
+];
+function tutorGateDecisionPaciente(q){
+  var t=q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  var hasA=TUTOR_GATE_A.some(function(re){return re.test(t);});
+  if(!hasA)return false;
+  return TUTOR_GATE_B.some(function(re){return re.test(t);});
+}
+function tutorGateCard(){
+  return '<div style="border:1px solid var(--amber);background:var(--amber-bg);border-radius:8px;padding:13px 15px">'+
+    '<div style="font-weight:700;font-size:13px;color:var(--amber);margin-bottom:6px">Esto es una decision sobre un paciente concreto</div>'+
+    '<div style="font-size:13px;line-height:1.6;color:var(--ts);margin-bottom:9px">El tutor es <strong>docente</strong>: explica que dice la evidencia, pero no emite indicaciones para un paciente real. La recomendacion estructurada y la verificacion de seguridad las entrega el <strong>modo clinico de ETHOS·TX</strong> (Hemorragia/MTP, Anemia, Coagulopatia, Timing). La decision y la firma son del medico tratante.</div>'+
+    '<div style="font-size:12.5px;line-height:1.55;color:var(--tc);background:var(--bgw);border-radius:6px;padding:9px 11px">'+
+      '<strong>Quieres aprender el principio?</strong> Reformulalo en terminos generales y te explico la evidencia con su fuente. Por ejemplo: <em>&laquo;que dice la evidencia sobre transfusion en un paciente estable con Hb 6,8 sin cardiopatia?&raquo;</em>'+
+    '</div>'+
+  '</div>';
+}
+
 function tutorSend(){
   var inp=document.getElementById('tutor-input');
   if(!inp){alert('Error: no encuentro el campo de pregunta.');return;}
@@ -6910,6 +6949,14 @@ function tutorSend(){
   }
   if(!window.__TUTOR_KEY){
     tutorAddMsg('bot','<p style="color:var(--red)">⚠ No hay clave de API activada. Vuelve arriba, pega tu clave y dale Activar.</p>');
+    return;
+  }
+  // Gate deterministico: solicitud de conducta sobre paciente real -> tarjeta fija, sin LLM.
+  if(tutorGateDecisionPaciente(q)){
+    tutorAddMsg('user','<p>'+tutorEsc(q)+'</p>');
+    tutorAddMsg('bot',tutorGateCard());
+    inp.value='';
+    inp.focus();
     return;
   }
   window.__TUTOR_QNUM=(window.__TUTOR_QNUM||0)+1;
