@@ -287,7 +287,7 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
   <button class="mt" data-mode="ref" onclick="setMode('ref')">📖 Referencia</button>
 </div>
 
-<div class="disc">⚠ <strong>PROTOTIPO DOCENTE EN VALIDACIÓN — herramienta educativa, NO es un dispositivo médico (no-SaMD).</strong> <strong>Uso previsto:</strong> formación y consulta de referencia para profesionales de la salud. No diagnostica, no prescribe y no reemplaza el juicio del médico ni el protocolo institucional vigente; la decisión y la firma son del médico. Anclada a evidencia internacional (PAUSE 2019, ASRA 2025, ACCP 2022, AHA/ACC 2024, ESAIC/ESRA 2022, ESC 2022, BRIDGE 2015) y alineada con el Protocolo HHHA PR-BS-0113/GCL1.7 v10 (dic 2024) como referencia local. Validación institucional formal pendiente.</div>
+<div class="disc">⚠ <strong>PROTOTIPO DOCENTE EN VALIDACIÓN — herramienta educativa. Posición regulatoria preliminar: no-SaMD bajo el uso previsto actual; la clasificación formal no ha sido determinada por la autoridad competente. No autorizada para uso asistencial autónomo.</strong> <strong>Uso previsto:</strong> formación y consulta de referencia para profesionales de la salud. No diagnostica, no prescribe y no reemplaza el juicio del médico ni el protocolo institucional vigente; la decisión y la firma son del médico. Anclada a evidencia internacional (PAUSE 2019, ASRA 2025, ACCP 2022, AHA/ACC 2024, ESAIC/ESRA 2022, ESC 2022, BRIDGE 2015) y alineada con el Protocolo HHHA PR-BS-0113/GCL1.7 v10 (dic 2024) como referencia local. Validación institucional formal pendiente.</div>
 <details class="sys-legend" open>
 <summary><span class="sl-t">Estados del sistema</span><span class="sl-chip sl-g">● Determinístico</span><span class="sl-chip sl-r">● Límite · deriva</span><span class="sl-chip sl-b">● IA · docente</span><span class="sl-hint">qué significa cada color ▾</span></summary>
 <div class="sl-body">
@@ -1357,7 +1357,7 @@ function etxSI(){var fc=parseFloat(document.getElementById('etx-fc').value),pas=
 <!-- Panel: Aprender (currículo) -->
 <div id="teach-aprender" class="teach-panel" style="display:none"></div>
 
-<!-- Panel: Tutor IA (agente RAG docente · v20) -->
+<!-- Panel: Tutor IA (tutor docente con grounding por contexto completo · v20) -->
 <div id="teach-tutor-ia" class="teach-panel" style="display:none"></div>
 
 </div>
@@ -6515,34 +6515,29 @@ function renderVolemiaATLS(){
 }
 
 // Cálculo de la calculadora docente
+// Calculo puro y verificable de los umbrales ATLS. Separado del DOM para que el
+// banco de regresion pueda ejercitarlo sin navegador. Fuente de los porcentajes:
+// ATLS 10.ª ed. (ACS 2018). Edad y fragilidad NO los modifican: no existe factor
+// de correccion publicado (verificado contra ACS TQIP, guia europea 6.ª ed.,
+// WSES 2023 y ESAIC 2023, jul-2026). Solo el embarazo altera la volemia.
+function vatls_umbrales(peso, edad, cond){
+  var volemia = peso * 70, factorEmb = 1.0, notaCondicion = '', avisos = [];
+  if(cond === 'emb_30'){ factorEmb = 1.40; notaCondicion = 'Embarazo 30 sem: volemia \u219140%'; }
+  else if(cond === 'emb_termino'){ factorEmb = 1.50; notaCondicion = 'Embarazo t\u00e9rmino \u226536 sem: volemia \u219150%'; }
+  if(cond === 'frag_mod' || cond === 'frag_sev' || cond === 'adulto_mayor' || edad >= 65){ avisos.push('signos'); }
+  if(cond === 'frag_sev'){ avisos.push('fragilidad'); }
+  volemia = volemia * factorEmb;
+  return { volemia: volemia, notaCondicion: notaCondicion, avisos: avisos,
+           umbralII: volemia*0.15, umbralIII: volemia*0.30, umbralIV: volemia*0.40 };
+}
 function vatls_calc(){
   const peso = parseFloat(document.getElementById('vatls_peso')?.value) || 70;
   const edad = parseFloat(document.getElementById('vatls_edad')?.value) || 50;
   const cond = document.getElementById('vatls_cond')?.value || 'ninguna';
-  
-  let volemia = peso * 70;
-  let factorEmb = 1.0;
-  let factorEdadFrag = 1.0;
-  let notaCondicion = '';
-  
-  // Aplicar condición especial
-  if(cond === 'frag_mod'){ factorEdadFrag = 0.85; notaCondicion = 'Comorbilidad CV moderada: umbrales ↓15%'; }
-  else if(cond === 'frag_sev'){ factorEdadFrag = 0.70; notaCondicion = 'Fragilidad severa: umbrales ↓30%'; }
-  else if(cond === 'adulto_mayor'){ factorEdadFrag = 0.75; notaCondicion = 'Adulto mayor ≥75 años: umbrales ↓25%'; }
-  else if(cond === 'emb_30'){ factorEmb = 1.40; notaCondicion = 'Embarazo 30 sem: volemia ↑40%'; }
-  else if(cond === 'emb_termino'){ factorEmb = 1.50; notaCondicion = 'Embarazo término ≥36 sem: volemia ↑50%'; }
-  else {
-    // Aplicar edad por sí sola si "ninguna"
-    if(edad >= 75){ factorEdadFrag = 0.75; notaCondicion = `Adulto mayor (${edad} años): umbrales ↓25%`; }
-    else if(edad >= 65){ factorEdadFrag = 0.85; notaCondicion = `Edad ≥65 años: umbrales ↓15%`; }
-    else if(edad < 40){ factorEdadFrag = 1.10; notaCondicion = `Adulto joven: tolera 10% más`; }
-  }
-  
-  volemia = volemia * factorEmb;
-  const umbralII = volemia * 0.15 * factorEdadFrag;
-  const umbralIII = volemia * 0.30 * factorEdadFrag;
-  const umbralIV = volemia * 0.40 * factorEdadFrag;
-  
+  const U = vatls_umbrales(peso, edad, cond);
+  const volemia = U.volemia, notaCondicion = U.notaCondicion, avisos = U.avisos;
+  const umbralII = U.umbralII, umbralIII = U.umbralIII, umbralIV = U.umbralIV;
+
   const resDiv = document.getElementById('vatls_resultado');
   if(!resDiv) return;
   
@@ -6563,6 +6558,21 @@ function vatls_calc(){
         </div>
       </div>
       ${notaCondicion ? `<div style="padding:8px 10px;background:#f0f9ff;border-left:3px solid var(--blue);border-radius:4px;font-size:11px;color:var(--ts)">ℹ️ ${notaCondicion}</div>` : ''}
+      ${avisos.length ? `<div style="margin-top:8px;padding:9px 11px;background:var(--red-bg);border-left:3px solid var(--red);border-radius:4px;font-size:11px;color:var(--ts);line-height:1.55">
+        <strong style="color:var(--red)">Los umbrales por porcentaje engañan en este paciente.</strong>
+        No existe un factor de corrección publicado para ajustarlos por edad o fragilidad, de modo que ETHOS·TX no lo aplica.
+        Lo que sí está publicado con cifra son otros criterios:
+        <ul style="margin:6px 0 0 15px;padding:0">
+          <li>Usar <strong>PAS &lt; 110 mmHg</strong> (no &lt; 90) como señal de alarma en mayores de 65 años
+              <span style="color:var(--tt)">· Brown et al., análisis del NTDB; National Guideline for Field Triage 2021</span></li>
+          <li><strong>Índice de shock ≥ 1,0</strong> y <strong>FC ≥ 90</strong> en el anciano
+              <span style="color:var(--tt)">· WSES 2023, DOI 10.1186/s13017-024-00537-8</span></li>
+          <li>Preferir <strong>índice de shock o presión de pulso</strong> sobre la clase ATLS (Grado 1C)
+              <span style="color:var(--tt)">· Guía europea de sangrado postraumático 6.ª ed., DOI 10.1186/s13054-023-04327-7</span></li>
+          ${avisos.indexOf('fragilidad')>-1 ? '<li>El <strong>betabloqueo</strong> impide la taquicardia compensadora: una FC normal no descarta el shock</li>' : ''}
+        </ul>
+        <div style="margin-top:6px;color:var(--tt)">La clasificación ATLS es una estimación aproximada; en registros reales no clasifica a la mayoría de los pacientes. La decisión es del médico tratante.</div>
+      </div>` : ''}
       <div style="margin-top:10px;font-size:11px;color:var(--tt);line-height:1.5">
         Clase II (preparar tipo/cruzar): &gt;${Math.round(umbralII)} mL · 
         Clase III (activar MTP): &gt;${Math.round(umbralIII)} mL · 
@@ -6645,9 +6655,9 @@ function vatls_quiz(num, letra){
     3: {
       titulo: 'Adulto mayor frágil 65 kg, pérdida 800 mL',
       vol: 'Volemia: 65 × 70 = 4550 mL · Pérdida 800/4550 = 17.5%',
-      correcta: 'En esta paciente, ETHOS·TX reduce umbrales por edad ≥75 (factor 0.75) × fragilidad severa (factor 0.70) = factor 0.525. Umbral Clase III ajustado: 4550 × 0.30 × 0.525 = 717 mL. Con 800 mL ya está en Clase III ajustada → ACTIVAR MTP. Además, FC 78 con β-bloqueador puede enmascarar shock.',
+      correcta: 'Por porcentaje, 800/4550 = 17,6 % es Clase II, y ETHOS·TX no lo maquilla: no existe factor publicado que corrija los umbrales del ATLS por edad o fragilidad. La lección es otra: en esta paciente el porcentaje no es el criterio útil. La PAS de 130 puede ser hipotensión relativa si es hipertensa crónica; en mayores de 65 años la señal de alarma publicada es PAS &lt; 110 mmHg, no &lt; 90 (Brown, NTDB). La FC de 78 con β-bloqueador no descarta el shock porque impide la taquicardia compensadora, y el índice de shock queda falsamente tranquilizador. La guía europea recomienda con Grado 1C usar índice de shock o presión de pulso antes que la clase ATLS. Conducta: tratar como sangrado activo con riesgo alto, reevaluar con lactato y déficit de base, y decidir la activación por criterio clínico, no por el porcentaje.',
       mal: {
-        A:'Sin ajuste por edad/fragilidad sería 17% (Clase I). Pero ETHOS·TX ajusta los umbrales — esa es la lección clave.',
+        A:'El porcentaje es correcto, y ese es justamente el problema: en la anciana frágil betabloqueada el porcentaje subestima el riesgo, y la respuesta correcta no es inventar un factor de corrección sino cambiar de criterio.',
         C:'Esperar deterioro en adulto mayor β-bloqueado = perder ventana. La FC no responderá taquicárdicamente.'
       }
     }
@@ -6685,7 +6695,9 @@ window.addEventListener('DOMContentLoaded',function(){
 });
 
 // ═══════════════════════════════════════════════════════════════
-// AGENTE RAG DOCENTE (v21) — capa de IA generativa de ETHOS·TX
+// TUTOR DOCENTE (v21) — capa de IA generativa de ETHOS·TX
+// Grounding por contexto completo: las 26 sintesis curadas se inyectan integras
+// en cada consulta. No hay recuperacion vectorial; se reserva para el escalado.
 // IA donde el riesgo es comunicativo (enseñar). El núcleo de
 // decisión clínica sigue siendo determinístico (modos 1-4).
 // Grounding estricto sobre el corpus de evidencia con DOI:
@@ -6747,7 +6759,7 @@ function renderTutorIA(){
   el.dataset.init='1';
   el.innerHTML=''+
   '<div class="card">'+
-    '<div class="card-title">💬 Pregúntale al tutor — agente RAG docente</div>'+
+    '<div class="card-title">💬 Pregúntale al tutor — tutor docente con grounding por contexto completo</div>'+
     '<div style="background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.55;margin:10px 0;color:var(--ts)">'+
       '<strong style="color:var(--blue)">Cómo funciona.</strong> Este asistente usa un modelo de lenguaje (Claude) restringido a un corpus curado de '+TUTOR_KB.length+' publicaciones con DOI. Cada afirmación se acompaña de su fuente verificable. Si una pregunta cae fuera de la base, el asistente lo declara en lugar de inventar — ese es el mecanismo contra la alucinación.'+
     '</div>'+
@@ -6870,14 +6882,14 @@ function tutorExportar(){
   tabla+='| # | Correcta clín. | Citó (real/pertinente) | Comportamiento | ¿Alucinó? | Notas |\n';
   tabla+='|---|---|---|---|---|---|\n';
   for(var i=1;i<=qn;i++){ tabla+='| '+i+' |  |  |  |  |  |\n'; }
-  var full='EVALUACIÓN AGENTE RAG DOCENTE — ETHOS·TX\nFecha: '+new Date().toLocaleString()+'\nTotal preguntas: '+qn+'\n\n'+txt+tabla;
+  var full='EVALUACIÓN DEL TUTOR DOCENTE — ETHOS·TX\nFecha: '+new Date().toLocaleString()+'\nTotal preguntas: '+qn+'\n\n'+txt+tabla;
   var blob=new Blob([full],{type:'text/plain;charset=utf-8'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
-  a.href=url; a.download='evaluacion_RAG_ethos.txt';
+  a.href=url; a.download='evaluacion_tutor_ethos.txt';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  tutorFlash('Archivo descargado: evaluacion_RAG_ethos.txt');
+  tutorFlash('Archivo descargado: evaluacion_tutor_ethos.txt');
 }
 
 function tutorFallbackCopy(txt){
@@ -7004,19 +7016,25 @@ var TUTOR_GATE_B=[
   /\bque (doy|indico|administro|pongo|hago con)\b/,
   /\bcuanto(s|as)? (le )?(doy|indico|administro|transfundo|pongo)\b/,
   /\b(le|lo|la) (indico|administro|pongo|doy|inicio|suspendo|revierto)\b/,
-  /\bprocedo con\b/
-];
-var TUTOR_GATE_C=[
-  /\bcual es (la|el) (conducta|manejo|indicacion|decision|dosis|tratamiento)\b/,
-  /\bcual seria (la|el) (conducta|manejo|indicacion|decision)\b/,
+  /\bprocedo con\b/,
+  /\b(conducta|manejo|indicacion|decision) (a seguir|clinic[ao]|indicad[oa])?\b/,
   /\bque (hago|debo hacer|haria(s)?|hacemos)\b/,
+  /\bque dosis\b/,
+  /\bcuantas unidades\b/
+];
+// C: peticion de conducta SIN complemento tematico. La marca no es la palabra
+// "manejo" sino que la pregunta no tenga objeto de dominio: "cual es el manejo?"
+// pide conducta; "cual es el manejo del sangrado por warfarina?" es docente.
+var TUTOR_GATE_C=[
+  /\bcual (es|seria) (la|el) (conducta|manejo|indicacion|decision|dosis|tratamiento)( a seguir| indicad[oa]| correct[oa]| adecuad[oa])?\s*(aqui|ahora|en este caso|en mi paciente|con (el|ella|este paciente))?\s*[?!.]*\s*$/,
+  /\bque (hago|debo hacer|haria(s| usted)?|hacemos)\s*(aqui|ahora|con (el|ella|este|mi|la) ?(paciente)?)?\s*[?!.]*\s*$/,
+  /\bque (le|lo|la) (doy|pongo|administro|indico|transfundo|inicio|suspendo|reviert[oa])\b/,
   /\bque\b[^?.!]{0,30}\b(le|lo|la) (doy|pongo|administro|indico|transfundo|inicio)\b/,
-  /\bcuanto(s|as)?\b[^?.!]{0,30}\b((le|lo|la) )?(doy|pongo|administro|transfundo|indico)\b/,
-  /\bprocedo\b/,
-  /\b(transfundo|opero|procedo|revierto|suspendo) *(o no)? *\?/,
-  /\b(le|lo|la) (transfundo|opero|revierto|suspendo)\b/,
-  /\bsenala(me)? (el|la) (manejo|conducta|indicacion)\b/,
-  /\b(indicame|dime) (que|cual|cuanto)\b/,
+  /\bcuanto(s|as)?\b[^?.!]{0,30}\b(le|lo|la) (doy|pongo|administro|transfundo|indico)\b/,
+  /\b(le|lo|la) (transfundo|opero|revierto|suspendo|indico|administro|inicio|doy|pongo)\b/,
+  /\b(transfundo|opero|procedo|revierto|suspendo)\b\s*(o no)?\s*[?!.]*\s*$/,
+  /\bprocedo (con|a)\b/,
+  /\b(senala|senalame|indicame|dime|dame)me? ?(el|la|que|cual|cuanto)\b[^?.!]{0,25}\b(conducta|manejo|indicacion|hago|doy|transfundo)\b/,
   /\bactivo el (mtp|protocolo)\b/,
   /\bdebo (transfundir|indicar|dar|administrar|poner|iniciar|suspender|revertir|operar)\b/
 ];
