@@ -7033,16 +7033,18 @@ function tutorSend(){
     setTimeout(function(){inp.style.border='1px solid var(--bd)';},2000);
     return;
   }
-  if(!window.__TUTOR_KEY){
-    tutorAddMsg('bot','<p style="color:var(--red)">⚠ No hay clave de API activada. Vuelve arriba, pega tu clave y dale Activar.</p>');
-    return;
-  }
-  // Gate deterministico: solicitud de conducta sobre paciente real -> tarjeta fija, sin LLM.
+  // Gate deterministico: barrera del sistema, opera con independencia de la API.
+  // Va ANTES de comprobar la clave: una solicitud de conducta sobre un paciente real
+  // se intercepta siempre, haya o no capa generativa configurada.
   if(tutorGateDecisionPaciente(q)){
     tutorAddMsg('user','<p>'+tutorEsc(q)+'</p>');
     tutorAddMsg('bot',tutorGateCard());
     inp.value='';
     inp.focus();
+    return;
+  }
+  if(!window.__TUTOR_KEY){
+    tutorAddMsg('bot','<p style="color:var(--red)">⚠ No hay clave de API activada. Vuelve arriba, pega tu clave y dale Activar.</p>');
     return;
   }
   window.__TUTOR_QNUM=(window.__TUTOR_QNUM||0)+1;
