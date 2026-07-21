@@ -34,7 +34,7 @@
 --orange:#B85C1E;--orange-bg:#FEF6ED;--orange-bd:#F0D4B0;
 --yellow:#8B7000;--yellow-bg:#FFFCEB;--yellow-bd:#E8DDA0;
 --green:#1A7A4A;--green-bg:#F0FAF4;--green-bd:#B0DCC4;
---blue:#2563EB;--blue-bg:#EFF6FF;--blue-bd:#BFDBFE;
+--blue:#2563EB;--blue-bg:#EFF6FF;--blue-bd:#BFDBFE;--purple:#7C3AED;--purple-bg:#F5F3FF;--purple-bd:#DDD6FE;
 --serif:Georgia,'Times New Roman',serif;
 --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
 --mono:'SF Mono','Cascadia Code','Consolas','Courier New',monospace;
@@ -253,6 +253,17 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 .sys-legend .sl-body{padding:4px 14px 12px;display:grid;gap:7px;border-top:1px solid var(--bdl)}
 .sys-legend .sl-body>div{font-size:12px;line-height:1.5;color:var(--ts)}
 .sys-legend .sl-prin{margin-top:2px;padding:8px 11px;background:var(--bgw);border-radius:6px;font-weight:600;color:var(--tp)}
+
+.fb{margin-top:14px;border:1px solid var(--bdl);border-left:3px solid var(--br);background:var(--bgw);border-radius:8px;padding:10px 12px;font-size:12px}
+.fb-h{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--tc);margin-bottom:7px}
+.fb-r{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.fb-q{color:var(--ts);min-width:150px}
+.fb-b{border:1px solid var(--bd);background:var(--sf);border-radius:6px;padding:3px 10px;font-size:11.5px;cursor:pointer;color:var(--ts)}
+.fb-b:hover{border-color:var(--br);color:var(--br)}
+.fb-b.on{background:var(--br);border-color:var(--br);color:#fff;font-weight:600}
+.fb-n{width:100%;border:1px solid var(--bd);border-radius:6px;padding:5px 8px;font-size:11.5px;font-family:inherit;margin-top:2px}
+.fb-ok{color:var(--green);font-weight:600;font-size:11.5px}
+@media print{.fb{display:none}}
 </style>
 </head>
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false" oncopy="return false" oncut="return false" onpaste="return false">
@@ -286,6 +297,7 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 <div class="sl-prin">🔹 <strong>D calcula · A ordena.</strong> El núcleo <em>determinístico</em> (D) calcula y explica con reglas ancladas a fuente; la <em>anestesióloga/o</em> (A) decide, ordena y firma. La IA nunca decide sobre pacientes concretos.</div>
 </div>
 </details>
+<div style="margin:6px 14px 0;font-size:11px;color:var(--tc);display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span>Validaciones registradas: <strong id="fb-count">0</strong></span><button type="button" class="fb-b" onclick="fbExportar()">Exportar CSV</button><button type="button" class="fb-b" onclick="fbBorrar()">Borrar</button></div>
 <div style="margin:8px 14px 0;border:1px solid var(--bdl);border-radius:8px;background:var(--bgw);font-size:11.5px;line-height:1.55;color:var(--ts);padding:9px 12px">🔒 <strong>Privacidad y datos.</strong> Los módulos de cálculo funcionan 100&nbsp;% en tu navegador; lo que ingresas se guarda solo localmente (localStorage, para el puente entre herramientas ETHOS) y no se sube a ningún servidor. <strong>Excepción — Tutor IA:</strong> tus mensajes se envían a la API de Anthropic para generar la respuesta; <strong>no escribas datos identificables de pacientes</strong>. No se recolecta analítica. &nbsp;·&nbsp; 📧 <strong>Reportar un error o sugerencia:</strong> <a href="mailto:eddysalvador80@gmail.com?subject=ETHOS%C2%B7TX%20%E2%80%94%20reporte" style="color:var(--br);text-decoration:underline">eddysalvador80@gmail.com</a></div>
 <div class="hem-ban" id="hem-ban">🚨 PRIORIDAD: CONTROL HEMOSTÁTICO + MTP. La Hb es secundaria.</div>
 
@@ -2527,10 +2539,79 @@ function compCard(c){
   return h;
 }
 
+
+// ═══ VALIDACIÓN EMPÍRICA (recomendación del tutor, jul-2026) ═══
+// Captura precisión clínica y utilidad percibida bajo cada salida del sistema.
+// Sin backend: persiste en el navegador y se exporta a CSV para el análisis.
+// NO registra datos del paciente: solo el módulo, los veredictos y una nota libre.
+var FB_KEY='ethos_tx_fb_v1', FB_EV='ethos_tx_fb_ev', FB_BUILD='v24-e730e748';
+function fbLoad(){try{return JSON.parse(localStorage.getItem(FB_KEY)||'[]')}catch(e){return[]}}
+function fbSaveAll(a){try{localStorage.setItem(FB_KEY,JSON.stringify(a))}catch(e){}}
+function fbEvaluador(){
+  var v=null; try{v=localStorage.getItem(FB_EV)}catch(e){}
+  if(!v){ v=(window.prompt('Iniciales del evaluador (para el estudio). No se registran datos de pacientes.')||'anon').trim().slice(0,10)||'anon';
+    try{localStorage.setItem(FB_EV,v)}catch(e){} }
+  return v;
+}
+var __fbN=0, __fbTmp={};
+function fbWidget(ctx){
+  var id='fb'+(++__fbN);
+  __fbTmp[id]={ctx:ctx};
+  var u=''; for(var i=1;i<=5;i++){u+='<button type="button" class="fb-b" onclick="fbSet(\''+id+'\',\'utilidad\',\''+i+'\',this)">'+i+'</button>';}
+  return '<div class="fb" id="'+id+'">'+
+    '<div class="fb-h">Validación para el estudio · esta respuesta</div>'+
+    '<div class="fb-r"><span class="fb-q">¿Clínicamente correcta?</span>'+
+      '<button type="button" class="fb-b" onclick="fbSet(\''+id+'\',\'correcta\',\'si\',this)">Sí</button>'+
+      '<button type="button" class="fb-b" onclick="fbSet(\''+id+'\',\'correcta\',\'dudosa\',this)">Dudosa</button>'+
+      '<button type="button" class="fb-b" onclick="fbSet(\''+id+'\',\'correcta\',\'no\',this)">No</button></div>'+
+    '<div class="fb-r"><span class="fb-q">¿Te resultó útil? (1 nada · 5 mucho)</span>'+u+'</div>'+
+    '<input class="fb-n" placeholder="Comentario opcional (no incluyas datos del paciente)" '+
+      'onchange="fbSet(\''+id+'\',\'nota\',this.value,null)">'+
+    '<div class="fb-ok" id="'+id+'-ok" style="display:none">✓ Registrado. Gracias.</div></div>';
+}
+function fbSet(id,campo,valor,btn){
+  var t=__fbTmp[id]; if(!t)return;
+  t[campo]=valor;
+  if(btn){ var row=btn.parentNode.querySelectorAll('.fb-b');
+    for(var i=0;i<row.length;i++){ if(row[i].onclick.toString().indexOf("'"+campo+"'")>-1) row[i].classList.remove('on'); }
+    btn.classList.add('on'); }
+  if(t.correcta&&t.utilidad){
+    var arr=fbLoad(), prev=-1;
+    for(var j=0;j<arr.length;j++){ if(arr[j].wid===id){prev=j;break;} }
+    var rec={wid:id, ts:new Date().toISOString(), ev:fbEvaluador(), ctx:t.ctx,
+             correcta:t.correcta, utilidad:t.utilidad, nota:t.nota||'', build:FB_BUILD};
+    if(prev>=0)arr[prev]=rec; else arr.push(rec);
+    fbSaveAll(arr);
+    var ok=document.getElementById(id+'-ok'); if(ok)ok.style.display='block';
+    fbActualizarContador();
+  }
+}
+function fbActualizarContador(){
+  var c=document.getElementById('fb-count'); if(c)c.textContent=fbLoad().length;
+}
+function fbExportar(){
+  var a=fbLoad();
+  if(!a.length){alert('Todavía no hay validaciones registradas en este navegador.');return;}
+  var cab=['timestamp','evaluador','modulo','clinicamente_correcta','utilidad_1a5','comentario','build'];
+  var esc=function(x){x=(x==null?'':String(x)); return '"'+x.replace(/"/g,'""')+'"';};
+  var csv=cab.join(',')+'\n'+a.map(function(r){
+    return [r.ts,r.ev,r.ctx,r.correcta,r.utilidad,r.nota,r.build].map(esc).join(',');
+  }).join('\n');
+  var b=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+  var u=URL.createObjectURL(b), l=document.createElement('a');
+  l.href=u; l.download='ethos-tx_validaciones_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(l); l.click(); document.body.removeChild(l); URL.revokeObjectURL(u);
+}
+function fbBorrar(){
+  if(!confirm('¿Borrar las validaciones guardadas en ESTE navegador? Exporta antes si no lo has hecho.'))return;
+  try{localStorage.removeItem(FB_KEY)}catch(e){}
+  fbActualizarContador();
+}
+
 // ═══ OUTPUT BUILDER ═══
 function buildOut(prefix,seq,comps,t,id,op,rol,modeName,docHTML){
   let h='';
-  h+=`<div class="trace anim"><div class="tf"><span class="tfl">Hora</span><span class="tfv">${t}</span></div><div class="tf"><span class="tfl">Modo</span><span class="tfv">${modeName}</span></div><div class="tf"><span class="tfl">ID</span><span class="tfv">${id}</span></div><div class="tf"><span class="tfl">Operador</span><span class="tfv">${op}</span></div><div class="tf"><span class="tfl">Rol</span><span class="tfv">${rol}</span></div></div>`;
+  h+=`<div class="trace anim"><div class="tf" style="flex:0 0 auto"><span class="sl-chip sl-g">● Determinístico</span></div><div class="tf"><span class="tfl">Hora</span><span class="tfv">${t}</span></div><div class="tf"><span class="tfl">Modo</span><span class="tfv">${modeName}</span></div><div class="tf"><span class="tfl">ID</span><span class="tfv">${id}</span></div><div class="tf"><span class="tfl">Operador</span><span class="tfv">${op}</span></div><div class="tf"><span class="tfl">Rol</span><span class="tfv">${rol}</span></div></div>`;
   h+=`<div class="otabs"><button class="otab active" data-tab="${prefix}-plan" onclick="stab('${prefix}','plan')">📋 Plan</button><button class="otab" data-tab="${prefix}-comps" onclick="stab('${prefix}','comps')">💊 Componentes</button>${docHTML?`<button class="otab" data-tab="${prefix}-doc" onclick="stab('${prefix}','doc')">🎓 Docente</button>`:''}</div>`;
   h+=`<div id="${prefix}-plan" class="tp active"><div class="seq-card"><div class="seq-title">Secuencia de acciones</div>`;
   seq.forEach(s=>{const p=s.p==='urgent'?'urgent':s.p==='high'?'high':s.p==='normal'?'normal':'low';h+=`<div class="seq-item"><div class="seq-num ${p}">${['urgent','high','normal','low'].indexOf(p)+1}</div><div class="seq-body"><div class="seq-act">${s.a}</div><div class="seq-det">${s.d}</div></div></div>`;});
@@ -2538,6 +2619,7 @@ function buildOut(prefix,seq,comps,t,id,op,rol,modeName,docHTML){
   if(docHTML)h+=`<div id="${prefix}-doc" class="tp">${docHTML}</div>`;
   h+=`<div class="eval-ts">Evaluación generada: ${t}</div>`;
   h+=`<div style="margin-top:20px;padding:16px;background:var(--bgw);border:1px solid var(--bd);border-radius:var(--radius);text-align:center"><button onclick="nuevoP({skipConfirm:true})" style="background:#dc2626;color:white;border:none;padding:12px 28px;border-radius:var(--radius-sm);font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-sm)" onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">🔄 Nueva evaluación / nuevo paciente</button><div style="font-size:11px;color:var(--tt);margin-top:8px">Limpia todos los campos y reinicia el formulario</div></div>`;
+  h+=fbWidget(prefix);
   return h;
 }
 
@@ -2546,7 +2628,7 @@ function evalMTP(){
   // ⛔ SAFETY GATE v14: bloqueo por condiciones excluyentes
   if(hasSafetyGateBlock()){
     const o=document.getElementById('out-mtp');
-    o.innerHTML=`<div class="err anim"><span style="font-size:18px">⛔</span><div class="err-t">${safetyGateBlockMessage()}</div></div>`;
+    o.innerHTML=`<div class="err anim"><span style="font-size:18px">⛔</span><div class="err-t"><span class="sl-chip sl-r" style="margin-bottom:6px">● Límite · deriva</span><br>${safetyGateBlockMessage()}</div></div>`+fbWidget('safety-gate');
     o.style.display='block';
     document.querySelector('.safety-gate').scrollIntoView({behavior:'smooth',block:'center'});
     return;
@@ -3024,7 +3106,7 @@ function evalAnemia(){
   // ⛔ SAFETY GATE v14: bloqueo por condiciones excluyentes
   if(hasSafetyGateBlock()){
     const o=document.getElementById('out-anemia');
-    o.innerHTML=`<div class="err anim"><span style="font-size:18px">⛔</span><div class="err-t">${safetyGateBlockMessage()}</div></div>`;
+    o.innerHTML=`<div class="err anim"><span style="font-size:18px">⛔</span><div class="err-t"><span class="sl-chip sl-r" style="margin-bottom:6px">● Límite · deriva</span><br>${safetyGateBlockMessage()}</div></div>`+fbWidget('safety-gate');
     o.style.display='block';
     document.querySelector('.safety-gate').scrollIntoView({behavior:'smooth',block:'center'});
     return;
@@ -3254,7 +3336,7 @@ function evalCoag(){
   // ⛔ SAFETY GATE v14: bloqueo por condiciones excluyentes
   if(hasSafetyGateBlock()){
     const o=document.getElementById('out-coag');
-    o.innerHTML=`<div class="err anim"><span style="font-size:18px">⛔</span><div class="err-t">${safetyGateBlockMessage()}</div></div>`;
+    o.innerHTML=`<div class="err anim"><span style="font-size:18px">⛔</span><div class="err-t"><span class="sl-chip sl-r" style="margin-bottom:6px">● Límite · deriva</span><br>${safetyGateBlockMessage()}</div></div>`+fbWidget('safety-gate');
     o.style.display='block';
     document.querySelector('.safety-gate').scrollIntoView({behavior:'smooth',block:'center'});
     return;
@@ -4540,7 +4622,7 @@ function evalTiming() {
   // ⛔ SAFETY GATE v14: bloqueo por condiciones excluyentes
   if(hasSafetyGateBlock()){
     const o=document.getElementById('out-timing');
-    o.innerHTML=`<div class="err anim"><span style="font-size:18px">⛔</span><div class="err-t">${safetyGateBlockMessage()}</div></div>`;
+    o.innerHTML=`<div class="err anim"><span style="font-size:18px">⛔</span><div class="err-t"><span class="sl-chip sl-r" style="margin-bottom:6px">● Límite · deriva</span><br>${safetyGateBlockMessage()}</div></div>`+fbWidget('safety-gate');
     o.style.display='block';
     document.querySelector('.safety-gate').scrollIntoView({behavior:'smooth',block:'center'});
     return;
@@ -4872,7 +4954,7 @@ function evalTiming() {
   `;
   
   const out = document.getElementById('out-timing');
-  out.innerHTML = html;
+  out.innerHTML = html + fbWidget('timing');
   out.style.display = 'block';
   out.scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -6670,8 +6752,8 @@ function renderTutorIA(){
     '<div style="background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.55;margin:10px 0;color:var(--ts)">'+
       '<strong style="color:var(--blue)">Cómo funciona.</strong> Este asistente usa un modelo de lenguaje (Claude) restringido a un corpus curado de '+TUTOR_KB.length+' publicaciones con DOI. Cada afirmación se acompaña de su fuente verificable. Si una pregunta cae fuera de la base, el asistente lo declara en lugar de inventar — ese es el mecanismo contra la alucinación.'+
     '</div>'+
-    '<div style="background:var(--amber-bg);border-left:3px solid var(--amber);border-radius:6px;padding:9px 12px;font-size:11px;line-height:1.5;margin:10px 0;color:var(--ts)">'+
-      '<strong style="color:var(--amber)">⚠ Solo docente.</strong> Explica evidencia y principios generales. No decide sobre pacientes concretos ni sustituye el juicio clínico. La decisión transfusional sobre un paciente real corresponde a los modos clínicos de ETHOS·TX con validación humana.'+
+    '<div style="background:var(--orange-bg);border-left:3px solid var(--orange);border-radius:6px;padding:9px 12px;font-size:11px;line-height:1.5;margin:10px 0;color:var(--ts)">'+
+      '<strong style="color:var(--orange)">⚠ Solo docente.</strong> Explica evidencia y principios generales. No decide sobre pacientes concretos ni sustituye el juicio clínico. La decisión transfusional sobre un paciente real corresponde a los modos clínicos de ETHOS·TX con validación humana.'+
     '</div>'+
     '<div id="tutor-keybar" style="margin:10px 0">'+
       '<div style="font-size:12px;color:var(--ts);margin-bottom:6px">Para activar el asistente, introduce tu clave de API de Anthropic. <span style="color:var(--tc)">Se guarda solo en memoria de esta sesión y se borra al cerrar; no queda escrita en el archivo.</span></div>'+
@@ -6719,10 +6801,10 @@ function tutorPegar(){
       document.getElementById('tutor-apikey').value=t.trim();
       st.innerHTML='<span style="color:var(--br)">Clave pegada. Revisa que empiece por sk-ant- y dale Activar.</span>';
     }).catch(function(){
-      st.innerHTML='<span style="color:var(--amber)">El navegador no permitió pegar automáticamente. Pega a mano con Cmd+V sobre el campo.</span>';
+      st.innerHTML='<span style="color:var(--orange)">El navegador no permitió pegar automáticamente. Pega a mano con Cmd+V sobre el campo.</span>';
     });
   }else{
-    st.innerHTML='<span style="color:var(--amber)">Pega a mano con Cmd+V sobre el campo.</span>';
+    st.innerHTML='<span style="color:var(--orange)">Pega a mano con Cmd+V sobre el campo.</span>';
   }
 }
 
@@ -6853,7 +6935,7 @@ function tutorRender(text){
       var url=r.doi?('https://doi.org/'+r.doi):(r.url||'#');
       src+='<div style="margin-bottom:8px;border:1px solid var(--bdl);border-radius:7px;overflow:hidden">'+
         '<div style="padding:6px 10px;background:var(--brs)"><span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--br)">'+tutorEsc(r.cita)+'</span> &middot; <span style="font-size:11px;color:var(--ts)"><em>'+tutorEsc(r.titulo)+'</em></span></div>'+
-        (r.tema?'<div style="padding:8px 10px;font-size:11.5px;line-height:1.55;color:var(--ts);border-top:1px solid var(--bdl)"><span style="font-family:var(--mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--tc);display:block;margin-bottom:4px">Fragmento de evidencia</span>'+tutorEsc(r.tema)+'</div>':'')+
+        (r.tema?'<div style="padding:8px 10px;font-size:11.5px;line-height:1.55;color:var(--ts);border-top:1px solid var(--bdl)"><span style="font-family:var(--mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--tc);display:block;margin-bottom:4px">Síntesis curada de la fuente</span>'+tutorEsc(r.tema)+'</div>':'')+
         '<div style="padding:5px 10px;background:var(--sfa);border-top:1px solid var(--bdl)"><a href="'+url+'" target="_blank" style="color:var(--br);text-decoration:none;font-family:var(--mono);font-size:10px">'+(r.doi?'↗ Verificar en la fuente · DOI '+r.doi:'↗ Verificar en la fuente')+'</a></div>'+
       '</div>';
     });
@@ -6932,8 +7014,8 @@ function tutorGateDecisionPaciente(q){
   return TUTOR_GATE_B.some(function(re){return re.test(t);});
 }
 function tutorGateCard(){
-  return '<div style="border:1px solid var(--amber);background:var(--amber-bg);border-radius:8px;padding:13px 15px">'+
-    '<div style="font-weight:700;font-size:13px;color:var(--amber);margin-bottom:6px">Esto es una decision sobre un paciente concreto</div>'+
+  return '<div style="border:1px solid var(--red-bd);background:var(--red-bg);border-radius:8px;padding:13px 15px">'+
+    '<div style="margin-bottom:6px"><span class="sl-chip sl-r">● Límite · deriva</span></div><div style="font-weight:700;font-size:13px;color:var(--red);margin-bottom:6px">Esto es una decision sobre un paciente concreto</div>'+
     '<div style="font-size:13px;line-height:1.6;color:var(--ts);margin-bottom:9px">El tutor es <strong>docente</strong>: explica que dice la evidencia, pero no emite indicaciones para un paciente real. La recomendacion estructurada y la verificacion de seguridad las entrega el <strong>modo clinico de ETHOS·TX</strong> (Hemorragia/MTP, Anemia, Coagulopatia, Timing). La decision y la firma son del medico tratante.</div>'+
     '<div style="font-size:12.5px;line-height:1.55;color:var(--tc);background:var(--bgw);border-radius:6px;padding:9px 11px">'+
       '<strong>Quieres aprender el principio?</strong> Reformulalo en terminos generales y te explico la evidencia con su fuente. Por ejemplo: <em>&laquo;que dice la evidencia sobre transfusion en un paciente estable con Hb 6,8 sin cardiopatia?&raquo;</em>'+
@@ -6995,7 +7077,7 @@ function tutorSend(){
     }
     if(!text)text='No pude generar una respuesta. Intenta reformular la pregunta.';
     TUTOR_HISTORY.push({role:'assistant',content:text});
-    tutorAddMsg('bot',tutorRender(text),'ia');
+    tutorAddMsg('bot',tutorRender(text)+fbWidget('tutor-ia'),'ia');
   }).catch(function(err){
     tutorThinking(false);
     tutorAddMsg('bot','<p>Hubo un problema de conexión: '+tutorEsc(String(err.message||err))+'</p>');
@@ -7278,5 +7360,6 @@ function temarioTxHTML(){
 <!-- Analítica de uso sin cookies (GoatCounter) — mide adopción, no recolecta datos personales -->
 <script data-goatcounter="https://ethostx.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
+<script>try{fbActualizarContador()}catch(e){}</script>
 </body>
 </html>
