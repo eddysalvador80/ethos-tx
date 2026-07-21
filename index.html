@@ -298,7 +298,7 @@ input.inp-ok{border-color:#10b981!important;background:#f0fdf4!important}
 </div>
 </details>
 <div style="margin:6px 14px 0;font-size:11px;color:var(--tc);display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span>Validaciones registradas: <strong id="fb-count">0</strong></span><button type="button" class="fb-b" onclick="fbExportar()">Exportar CSV</button><button type="button" class="fb-b" onclick="fbBorrar()">Borrar</button></div>
-<div style="margin:8px 14px 0;border:1px solid var(--bdl);border-radius:8px;background:var(--bgw);font-size:11.5px;line-height:1.55;color:var(--ts);padding:9px 12px">🔒 <strong>Privacidad y datos.</strong> Los módulos de cálculo funcionan 100&nbsp;% en tu navegador; lo que ingresas se guarda solo localmente (localStorage, para el puente entre herramientas ETHOS) y no se sube a ningún servidor. <strong>Excepción — Tutor IA:</strong> tus mensajes se envían a la API de Anthropic para generar la respuesta; <strong>no escribas datos identificables de pacientes</strong>. No se recolecta analítica. &nbsp;·&nbsp; 📧 <strong>Reportar un error o sugerencia:</strong> <a href="mailto:eddysalvador80@gmail.com?subject=ETHOS%C2%B7TX%20%E2%80%94%20reporte" style="color:var(--br);text-decoration:underline">eddysalvador80@gmail.com</a></div>
+<div style="margin:8px 14px 0;border:1px solid var(--bdl);border-radius:8px;background:var(--bgw);font-size:11.5px;line-height:1.55;color:var(--ts);padding:9px 12px">🔒 <strong>Privacidad y datos.</strong> Los módulos de cálculo funcionan 100&nbsp;% en tu navegador; lo que ingresas no se almacena: permanece en la memoria de la pagina y se pierde al cerrarla y no se sube a ningún servidor. <strong>Excepción — Tutor IA:</strong> tus mensajes se envían a la API de Anthropic para generar la respuesta; <strong>no escribas datos identificables de pacientes</strong>. No se recolecta analítica. &nbsp;·&nbsp; 📧 <strong>Reportar un error o sugerencia:</strong> <a href="mailto:eddysalvador80@gmail.com?subject=ETHOS%C2%B7TX%20%E2%80%94%20reporte" style="color:var(--br);text-decoration:underline">eddysalvador80@gmail.com</a></div>
 <div class="hem-ban" id="hem-ban">🚨 PRIORIDAD: CONTROL HEMOSTÁTICO + MTP. La Hb es secundaria.</div>
 
 <div class="app">
@@ -2544,7 +2544,7 @@ function compCard(c){
 // Captura precisión clínica y utilidad percibida bajo cada salida del sistema.
 // Sin backend: persiste en el navegador y se exporta a CSV para el análisis.
 // NO registra datos del paciente: solo el módulo, los veredictos y una nota libre.
-var FB_KEY='ethos_tx_fb_v1', FB_EV='ethos_tx_fb_ev', FB_BUILD='v24-e730e748';
+var FB_KEY='ethos_tx_fb_v1', FB_EV='ethos_tx_fb_ev', FB_BUILD='v24-r4-congelada';
 function fbLoad(){try{return JSON.parse(localStorage.getItem(FB_KEY)||'[]')}catch(e){return[]}}
 function fbSaveAll(a){try{localStorage.setItem(FB_KEY,JSON.stringify(a))}catch(e){}}
 function fbEvaluador(){
@@ -2604,7 +2604,7 @@ function fbExportar(){
 }
 function fbBorrar(){
   if(!confirm('¿Borrar las validaciones guardadas en ESTE navegador? Exporta antes si no lo has hecho.'))return;
-  try{localStorage.removeItem(FB_KEY)}catch(e){}
+  try{localStorage.removeItem(FB_KEY);localStorage.removeItem(FB_EV)}catch(e){}
   fbActualizarContador();
 }
 
@@ -6728,13 +6728,12 @@ function tutorSystemPrompt(){
   '1. SOLO puedes afirmar contenido clínico respaldado por las fuentes de la BASE DE EVIDENCIA entregada abajo. NO uses conocimiento clínico externo a estas fuentes.\n'+
   '2. CADA afirmación clínica debe ir seguida de su cita en formato exacto: [[ID]] (ej: [[Carson-RBC]]). Puedes citar varias: [[CRASH-2]][[WOMAN]].\n'+
   '3. Si la pregunta NO puede responderse con las fuentes disponibles, DÍLO EXPLÍCITAMENTE: "Esto queda fuera de la base de evidencia de la que dispongo" y sugiere qué tipo de fuente se necesitaría. NUNCA inventes datos, cifras, dosis o umbrales que no estén en las fuentes.\n'+
-  '4. Si la pregunta es sobre un PACIENTE CONCRETO, sigue SIEMPRE este orden:\n'+
-  '   (a) PRIMERO, en UNA frase y sin rodeos, enuncia la conducta que la evidencia indica para ese escenario. Ej: "La evidencia respalda transfundir: una Hb de 6,8 en paciente estable sin cardiopatia esta por debajo del umbral de 7 g/dL [[Carson-RBC]]." Da la respuesta clara, no la insinues.\n'+
-  '   (b) DESPUES, en una linea, las condiciones que el clinico debe confirmar (sintomas, causa, etc.). Breve, no un muro.\n'+
-  '   (c) AL FINAL, una sola frase: la decision y la firma son del medico tratante. NO repitas el disclaimer mas de una vez.\n'+
-  '   IMPORTANTE: enunciar la conducta basada en evidencia es ENSENAR (permitido y necesario). Lo prohibido es ordenar el acto. Di lo que la evidencia respalda, no des la orden. Pero NUNCA dejes al usuario sin una respuesta clara cuando la evidencia la tiene.\n\n'+
+  '4. FRONTERA ENSENAR vs DECIDIR (regla de seguridad central). Ensenas la evidencia; nunca emites la indicacion para un paciente real.\n'+
+  '   - Pregunta ilustrativa o sobre un TIPO de escenario (ej: "que dice la evidencia ante una Hb de 6,8 en paciente estable sin cardiopatia?"): explicalo con claridad y con su cita: que ESTABLECE la evidencia para ese tipo de caso. Ensenar el principio del escenario es tu funcion; hazlo sin rodeos, pero como conocimiento, no como orden. Ej: "La evidencia situa a un paciente estable sin cardiopatia con Hb 6,8 por debajo del umbral restrictivo de 7 g/dL [[Carson-RBC]]."\n'+
+  '   - Solicitud de conducta para un paciente REAL y PRESENTE (ej: "tengo un paciente con Hb 6,8, le transfundo?", "que hago con mi paciente?"): NO entregues la indicacion. (a) Explica que establece la evidencia para ese tipo de escenario, con su cita [[ID]]. (b) Indica que la recomendacion estructurada y la verificacion de seguridad las entrega el modo clinico de ETHOS·TX, no el tutor. (c) Cierra en una frase: la decision y la firma son del medico tratante.\n'+
+  '   - En todos los casos: NUNCA emitas una orden ("transfunde", "administra X mg", "indica Y") dirigida a un paciente concreto. La diferencia entre explicar lo que la evidencia establece y ordenar el acto es la frontera que no cruzas. No seas evasivo con la evidencia; se inflexible con la orden.\n\n'+
   'TONO (critico - el usuario suele estar bajo estres clinico):\n'+
-  '- Respuesta RAPIDA y directa. La conducta o el dato clave va en las PRIMERAS lineas, nunca al final. El usuario no debe leer entre lineas ni llegar al final para saber que hacer.\n'+
+  '- Respuesta RAPIDA y directa. El principio o el dato clave va en las PRIMERAS lineas, nunca al final. El usuario no debe leer entre lineas ni llegar al final para encontrar lo que la evidencia establece.\n'+
   '- Tono SERENO y profesional. NO uses emojis de alarma. NO uses frases dramaticas ("cada minuto cuenta", "el reloj corre"). La urgencia se transmite con claridad, no con alarmismo.\n'+
   '- Estructura minima: ve al grano. Evita multiplicar encabezados y cajas. Una respuesta corta y clara es mejor que una larga y ornamentada.\n\n'+
   'ESTILO: Responde en espanol, claro y conciso. Usa negritas solo para el dato clave. Listas solo si aportan claridad real. No excedas ~180 palabras salvo que se pida profundizar. Lidera siempre con la respuesta, no con el preambulo.\n\n'+
@@ -7007,8 +7006,24 @@ var TUTOR_GATE_B=[
   /\b(le|lo|la) (indico|administro|pongo|doy|inicio|suspendo|revierto)\b/,
   /\bprocedo con\b/
 ];
+var TUTOR_GATE_C=[
+  /\bcual es (la|el) (conducta|manejo|indicacion|decision|dosis|tratamiento)\b/,
+  /\bcual seria (la|el) (conducta|manejo|indicacion|decision)\b/,
+  /\bque (hago|debo hacer|haria(s)?|hacemos)\b/,
+  /\bque\b[^?.!]{0,30}\b(le|lo|la) (doy|pongo|administro|indico|transfundo|inicio)\b/,
+  /\bcuanto(s|as)?\b[^?.!]{0,30}\b((le|lo|la) )?(doy|pongo|administro|transfundo|indico)\b/,
+  /\bprocedo\b/,
+  /\b(transfundo|opero|procedo|revierto|suspendo) *(o no)? *\?/,
+  /\b(le|lo|la) (transfundo|opero|revierto|suspendo)\b/,
+  /\bsenala(me)? (el|la) (manejo|conducta|indicacion)\b/,
+  /\b(indicame|dime) (que|cual|cuanto)\b/,
+  /\bactivo el (mtp|protocolo)\b/,
+  /\bdebo (transfundir|indicar|dar|administrar|poner|iniciar|suspender|revertir|operar)\b/
+];
 function tutorGateDecisionPaciente(q){
   var t=q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  // (A y B): contexto de paciente + accion. O bien (C): peticion de conducta inequivoca.
+  if(TUTOR_GATE_C.some(function(re){return re.test(t);}))return true;
   var hasA=TUTOR_GATE_A.some(function(re){return re.test(t);});
   if(!hasA)return false;
   return TUTOR_GATE_B.some(function(re){return re.test(t);});
