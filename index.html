@@ -6893,7 +6893,7 @@ function tutorThinking(on){
   var zone=document.getElementById('tutor-msgs');
   if(on){
     var w=document.createElement('div');w.id='tutor-thinking';w.style.cssText='display:flex;gap:10px';
-    w.innerHTML='<div style="width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;background:var(--br);color:#fff">TX</div><div style="flex:1;font-size:12px;color:var(--tc);font-style:italic;padding-top:5px">Recuperando evidencia…</div>';
+    w.innerHTML='<div style="width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;background:var(--br);color:#fff">TX</div><div style="flex:1;font-size:12px;color:var(--tc);font-style:italic;padding-top:5px">Consultando la base de evidencia…</div>';
     zone.appendChild(w);zone.scrollTop=zone.scrollHeight;
   }else{var t=document.getElementById('tutor-thinking');if(t)t.remove();}
 }
@@ -6909,7 +6909,11 @@ var TUTOR_GATE_A=[
   /\bestoy con (un |una )?paciente/,
   /\b(el|un) paciente que tengo\b/,
   /\bpaciente (mio|mia)\b/,
-  /\ba mi paciente\b/
+  /\ba mi paciente\b/,
+  /\bpaciente de \d+/,
+  /\b(mujer|varon|hombre|nino|nina|lactante|gestante|embarazada|puerpera|senor|senora) de \d+/,
+  /\b(paciente|enfermo)\s+(masculino|femenino)\b/,
+  /\bun[ao]? (mujer|varon|hombre) de \d+/
 ];
 var TUTOR_GATE_B=[
   /\b(le|lo|la) transfundo\b/,
