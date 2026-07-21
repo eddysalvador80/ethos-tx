@@ -1948,6 +1948,8 @@ function u1(){
   const hem=S.m1hemo==='Choque'||S.m1hemo==='Inestable';
   document.getElementById('hem-ban').style.display=hem?'block':'none';
   const ac=document.getElementById('m1ac').value;
+  S.m1ac=ac;   // el estado es la unica fuente que lee evalMTP: sin esto el
+               // anticoagulante seleccionado no llegaba nunca al calculo
   const timeDiv=document.getElementById('ac-time-div');
   if(ac && ac!=='Ninguno' && ac!=='Desconocido' && ac!==''){timeDiv.style.display='block';}else{timeDiv.style.display='none';}
 }
@@ -2502,6 +2504,8 @@ function u1_calcVolemia(){
 
 function u3(){
   const ac=document.getElementById('m3ac').value;
+  S.m3ac=ac;   // idem: evalCoag lee S.m3ac. Sin esta linea el desplegable era
+               // inerte y toda reversion respondia "Sin anticoagulante".
   const timeDiv=document.getElementById('ac-time-div-coag');
   if(ac && ac!=='Ninguno' && ac!=='Desconocido' && ac!==''){timeDiv.style.display='block';}else{timeDiv.style.display='none';}
 }
@@ -6690,8 +6694,10 @@ function vatls_quiz(num, letra){
 // Inicialización al cargar página
 window.addEventListener('DOMContentLoaded',function(){
   updateVolemia();
-  const acSelect=document.getElementById('m3ac');
-  if(acSelect&&acSelect.value==='Ninguno'){S.m3ac='Ninguno';}
+  const ac3=document.getElementById('m3ac');
+  if(ac3){S.m3ac=ac3.value;}
+  const ac1=document.getElementById('m1ac');
+  if(ac1){S.m1ac=ac1.value;}
 });
 
 // ═══════════════════════════════════════════════════════════════
